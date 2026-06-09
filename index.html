@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solana Alpha Scanner | Mission Control</title>
+    <title>Solana Alpha | Mission Control</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #050508;
@@ -28,7 +28,8 @@
             --danger-dim: rgba(255, 68, 68, 0.15);
             --gradient-start: #00d4ff;
             --gradient-end: #7b2ff7;
-            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
         }
 
@@ -102,6 +103,7 @@
         }
 
         .logo-text {
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
             letter-spacing: -0.5px;
@@ -285,25 +287,36 @@
 
         .token-card:hover::before { opacity: 0.5; }
 
-        .token-header {
+        .card-header {
             padding: 24px;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             gap: 16px;
         }
 
-        .token-header-left { flex: 1; min-width: 0; }
+        .card-header-left { flex: 1; min-width: 0; }
 
-        .token-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
+        .token-symbol {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--accent);
             margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            line-height: 1.3;
             letter-spacing: -0.3px;
         }
 
-        .token-meta {
+        .card-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -321,64 +334,38 @@
             font-family: var(--font-mono);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: all 0.3s ease;
         }
 
-        .badge-type {
+        .badge-category {
             background: var(--accent-dim);
             color: var(--accent);
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
-        .badge-hold {
+        .badge-momentum-high {
             background: var(--success-dim);
             color: var(--success);
             border: 1px solid rgba(0, 255, 136, 0.2);
         }
 
-        .badge-no-hold {
+        .badge-momentum-med {
+            background: var(--warning-dim);
+            color: var(--warning);
+            border: 1px solid rgba(255, 170, 0, 0.2);
+        }
+
+        .badge-momentum-low {
+            background: var(--danger-dim);
+            color: var(--danger);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+        }
+
+        .badge-risk {
             background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
+            color: var(--text-secondary);
             border: 1px solid var(--border);
         }
-
-        .price-display {
-            font-family: var(--font-mono);
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .change-positive {
-            color: var(--success);
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .change-negative {
-            color: var(--danger);
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .sparkline {
-            width: 100px;
-            height: 40px;
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-        }
-
-        .sparkline-bar {
-            flex: 1;
-            background: var(--accent);
-            border-radius: 2px;
-            opacity: 0.6;
-            transition: all 0.3s ease;
-        }
-
-        .sparkline-bar:hover { opacity: 1; }
 
         .score-ring {
             width: 52px;
@@ -426,55 +413,160 @@
             z-index: 1;
         }
 
-        .token-body {
+        .card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.5s ease;
+        }
+
+        .card-body.expanded {
+            max-height: 2000px;
             padding: 0 24px 24px;
         }
 
-        .token-section {
-            margin-bottom: 16px;
-        }
+        .card-section { margin-bottom: 24px; }
 
-        .token-section-title {
+        .card-section-title {
             font-size: 11px;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .token-text {
+        .card-text {
             font-size: 14px;
             color: var(--text-secondary);
             line-height: 1.7;
         }
 
-        .watch-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
+        .card-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
             color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             transition: all 0.3s ease;
         }
 
-        .watch-btn:hover {
-            border-color: var(--accent);
+        .card-list li:last-child { border-bottom: none; }
+
+        .card-list li::before {
+            content: '›';
             color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            font-weight: 600;
+            font-size: 16px;
         }
 
-        .watch-btn.watched {
-            background: var(--accent-dim);
-            border-color: var(--accent);
-            color: var(--accent);
+        .card-list li:hover {
+            color: var(--text-primary);
+            padding-left: 4px;
         }
+
+        .action-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .action-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .action-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--border-hover);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-checkbox:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .action-checkbox.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .action-checkbox.checked::after {
+            content: '✓';
+            color: var(--bg-primary);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .action-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .action-item:hover .action-text { color: var(--text-primary); }
+
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .source-link:hover {
+            background: rgba(0, 212, 255, 0.25);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-muted);
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .expand-icon.rotated { transform: rotate(180deg); }
 
         .footer {
             text-align: center;
@@ -524,10 +616,17 @@
         @media (max-width: 640px) {
             .header { padding: 16px 20px; }
             .main { padding: 20px; }
-            .token-header { padding: 20px; }
-            .token-name { font-size: 18px; }
+            .card-header { padding: 20px; }
+            .card-title { font-size: 18px; }
             .score-ring { width: 44px; height: 44px; font-size: 15px; }
             .stat-value { font-size: 20px; }
+        }
+
+        .score-high { animation: glowPulse 2s ease-in-out infinite; }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 20px var(--accent-glow); }
+            50% { text-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(0, 212, 255, 0.2); }
         }
     </style>
 </head>
@@ -537,26 +636,26 @@
             <div class="logo">
                 <div class="logo-icon">S</div>
                 <div>
-                    <div class="logo-text">Solana Alpha Scanner</div>
-                    <div class="subtitle">Daily Token Tracker // v1.0</div>
+                    <div class="logo-text">Solana Alpha</div>
+                    <div class="subtitle">Token Intelligence // v1.0</div>
                 </div>
             </div>
             <div class="stats-bar">
                 <div class="stat">
-                    <div class="stat-value" id="total-tokens">3</div>
+                    <div class="stat-value" id="total-count">3</div>
                     <div class="stat-label">Tokens</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value" id="hold-to-earn">2</div>
-                    <div class="stat-label">Hold-to-Earn</div>
+                    <div class="stat-value" id="high-match-count">2</div>
+                    <div class="stat-label">High Conviction</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value" id="avg-score">7.0</div>
+                    <div class="stat-value" id="low-risk-count">1</div>
+                    <div class="stat-label">Low Risk</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="avg-score">7.3</div>
                     <div class="stat-label">Avg Score</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="positive-change">2</div>
-                    <div class="stat-label">Positive</div>
                 </div>
             </div>
         </div>
@@ -565,10 +664,11 @@
     <div class="filters">
         <div class="filter-group">
             <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="meme">Meme</button>
-            <button class="filter-btn" data-filter="dex">DEX</button>
-            <button class="filter-btn" data-filter="oracle">Oracle</button>
-            <button class="filter-btn" data-filter="hold-to-earn">Hold-to-Earn</button>
+            <button class="filter-btn" data-filter="defi">DeFi</button>
+            <button class="filter-btn" data-filter="nft">NFT</button>
+            <button class="filter-btn" data-filter="gaming">Gaming</button>
+            <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
+            <button class="filter-btn" data-filter="high-conviction">High Conviction</button>
         </div>
     </div>
 
@@ -576,143 +676,248 @@
         <div class="section-title">Active Opportunities</div>
         
         <div id="tokens-container">
-            <!-- Token 1 -->
-            <div class="token-card" data-type="meme" data-hold="no" data-score="6">
-                <div class="token-header">
-                    <div class="token-header-left">
-                        <div class="token-name">BONK</div>
-                        <div class="token-meta">
-                            <span class="badge badge-type">Meme</span>
-                            <span class="badge badge-no-hold">No Hold-to-Earn</span>
-                        </div>
-                        <div style="margin-top: 12px;">
-                            <span class="price-display">$0.000012</span>
-                            <span class="change-positive">+15%</span>
+            <div class="token-card" data-category="defi" data-risk="medium" data-momentum="high" data-score="8">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <div class="token-symbol">$JUP</div>
+                        <div class="card-title">Jupiter Exchange</div>
+                        <div class="card-meta">
+                            <span class="badge badge-category">DeFi</span>
+                            <span class="badge badge-momentum-high">High Momentum</span>
+                            <span class="badge badge-risk">Medium Risk</span>
                         </div>
                     </div>
-                    <div class="sparkline">
-                        <div class="sparkline-bar" style="height: 30%"></div>
-                        <div class="sparkline-bar" style="height: 45%"></div>
-                        <div class="sparkline-bar" style="height: 35%"></div>
-                        <div class="sparkline-bar" style="height: 60%"></div>
-                        <div class="sparkline-bar" style="height: 50%"></div>
-                        <div class="sparkline-bar" style="height: 75%"></div>
-                        <div class="sparkline-bar" style="height: 100%"></div>
-                    </div>
-                    <div class="score-ring">
-                        <div class="score-value">6</div>
-                    </div>
-                </div>
-                <div class="token-body">
-                    <div class="token-section">
-                        <div class="token-section-title">Analysis</div>
-                        <div class="token-text">
-                            Meme coin with strong community. High volatility but potential for quick gains. Not suitable for long-term hold-to-earn strategy.
-                        </div>
-                    </div>
-                    <button class="watch-btn" onclick="toggleWatch(this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Mark as Watched
-                    </button>
-                </div>
-            </div>
-
-            <!-- Token 2 -->
-            <div class="token-card" data-type="dex" data-hold="yes" data-score="8">
-                <div class="token-header">
-                    <div class="token-header-left">
-                        <div class="token-name">JUP</div>
-                        <div class="token-meta">
-                            <span class="badge badge-type">DEX</span>
-                            <span class="badge badge-hold">Hold-to-Earn</span>
-                        </div>
-                        <div style="margin-top: 12px;">
-                            <span class="price-display">$0.85</span>
-                            <span class="change-positive">+8%</span>
-                        </div>
-                    </div>
-                    <div class="sparkline">
-                        <div class="sparkline-bar" style="height: 40%"></div>
-                        <div class="sparkline-bar" style="height: 55%"></div>
-                        <div class="sparkline-bar" style="height: 45%"></div>
-                        <div class="sparkline-bar" style="height: 70%"></div>
-                        <div class="sparkline-bar" style="height: 60%"></div>
-                        <div class="sparkline-bar" style="height: 85%"></div>
-                        <div class="sparkline-bar" style="height: 100%"></div>
-                    </div>
-                    <div class="score-ring">
+                    <div class="score-ring score-high">
                         <div class="score-value">8</div>
                     </div>
+                    <div class="expand-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="token-body">
-                    <div class="token-section">
-                        <div class="token-section-title">Analysis</div>
-                        <div class="token-text">
-                            Jupiter DEX aggregator with strong fundamentals. Hold-to-earn rewards through governance and fee sharing. Solid long-term play.
+                <div class="card-body">
+                    <div class="card-section">
+                        <div class="card-section-title">The Thesis</div>
+                        <div class="card-text">
+                            Jupiter is the dominant DEX aggregator on Solana, handling 60%+ of all swap volume. With the launch of JUP token and governance, there's a clear path to value accrual through fee sharing and staking rewards.
                         </div>
                     </div>
-                    <button class="watch-btn" onclick="toggleWatch(this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Mark as Watched
-                    </button>
+                    <div class="card-section">
+                        <div class="card-section-title">Why It Works</div>
+                        <ul class="card-list">
+                            <li>Market leader: 60%+ of Solana DEX volume</li>
+                            <li>Real yield: Fees from swaps accrue to stakers</li>
+                            <li>Governance: Token holders vote on fee structures</li>
+                            <li>Ecosystem: Launchpad and perpetuals expanding</li>
+                        </ul>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Okeito's Angle</div>
+                        <div class="card-text">
+                            Core infrastructure play. Jupiter is the Uniswap of Solana — if Solana grows, Jupiter grows. Stake JUP for governance + yield. Monitor volume trends as leading indicator.
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Action Items</div>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Research JUP staking APY and lock periods</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Set up DCA strategy for JUP accumulation</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Monitor Jupiter volume vs competitors</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Research Jupiter Launchpad opportunities</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Resources</div>
+                        <a href="#" class="source-link">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+                            </svg>
+                            Jupiter Analytics Dashboard
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Token 3 -->
-            <div class="token-card" data-type="oracle" data-hold="yes" data-score="7">
-                <div class="token-header">
-                    <div class="token-header-left">
-                        <div class="token-name">PYTH</div>
-                        <div class="token-meta">
-                            <span class="badge badge-type">Oracle</span>
-                            <span class="badge badge-hold">Hold-to-Earn</span>
+            <div class="token-card" data-category="infrastructure" data-risk="low" data-momentum="medium" data-score="7">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <div class="token-symbol">$SOL</div>
+                        <div class="card-title">Solana</div>
+                        <div class="card-meta">
+                            <span class="badge badge-category">Infrastructure</span>
+                            <span class="badge badge-momentum-med">Steady</span>
+                            <span class="badge badge-risk">Low Risk</span>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <span class="price-display">$0.42</span>
-                            <span class="change-negative">-3%</span>
-                        </div>
-                    </div>
-                    <div class="sparkline">
-                        <div class="sparkline-bar" style="height: 100%"></div>
-                        <div class="sparkline-bar" style="height: 85%"></div>
-                        <div class="sparkline-bar" style="height: 70%"></div>
-                        <div class="sparkline-bar" style="height: 60%"></div>
-                        <div class="sparkline-bar" style="height: 55%"></div>
-                        <div class="sparkline-bar" style="height: 45%"></div>
-                        <div class="sparkline-bar" style="height: 40%"></div>
                     </div>
                     <div class="score-ring">
                         <div class="score-value">7</div>
                     </div>
+                    <div class="expand-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="token-body">
-                    <div class="token-section">
-                        <div class="token-section-title">Analysis</div>
-                        <div class="token-text">
-                            Price oracle network with growing adoption. Hold-to-earn through data provider rewards. Slight dip presents entry opportunity.
+                <div class="card-body">
+                    <div class="card-section">
+                        <div class="card-section-title">The Thesis</div>
+                        <div class="card-text">
+                            Solana is the fastest, cheapest L1 with real adoption. Firedancer upgrade coming Q1 2025 will 10x throughput. Institutional interest growing (PayPal, Visa pilots). The "ETH killer" narrative is back, but this time with metrics.
                         </div>
                     </div>
-                    <button class="watch-btn" onclick="toggleWatch(this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <div class="card-section">
+                        <div class="card-section-title">Why It Works</div>
+                        <ul class="card-list">
+                            <li>Speed: 65K TPS, sub-second finality</li>
+                            <li>Cost: $0.00025 per transaction</li>
+                            <li>Adoption: 2M+ active addresses daily</li>
+                            <li>Institutional: PayPal, Visa, Shopify integrations</li>
+                        </ul>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Okeito's Angle</div>
+                        <div class="card-text">
+                            Core holding. Solana is the "index bet" on crypto consumer apps. Stake for 6-8% APY. Use as collateral for DeFi plays. Monitor Firedancer launch and institutional announcements.
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Action Items</div>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Stake SOL for yield (Marinade or Jito)</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Set price alerts for $80, $120, $200</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Research Firedancer upgrade timeline</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Monitor institutional adoption news</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Resources</div>
+                        <a href="#" class="source-link">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+                            </svg>
+                            Solana Compass Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="token-card" data-category="gaming" data-risk="high" data-momentum="high" data-score="6">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-header-left">
+                        <div class="token-symbol">$BONK</div>
+                        <div class="card-title">Bonk</div>
+                        <div class="card-meta">
+                            <span class="badge badge-category">Gaming/Meme</span>
+                            <span class="badge badge-momentum-high">High Momentum</span>
+                            <span class="badge badge-risk">High Risk</span>
+                        </div>
+                    </div>
+                    <div class="score-ring">
+                        <div class="score-value">6</div>
+                    </div>
+                    <div class="expand-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6l4 4 4-4"/>
                         </svg>
-                        Mark as Watched
-                    </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <div class="card-section-title">The Thesis</div>
+                        <div class="card-text">
+                            Bonk is the "Dogecoin of Solana" but with actual utility. Integrated into 50+ dApps, used for NFT mints, gaming, and tipping. Community-driven with organic growth. High risk but asymmetric upside if Solana meme season returns.
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Why It Works</div>
+                        <ul class="card-list">
+                            <li>Distribution: Airdropped to 1M+ wallets</li>
+                            <li>Utility: 50+ integrations across Solana</li>
+                            <li>Community: Active, organic growth</li>
+                            <li>Asymmetric: Small position → large upside</li>
+                        </ul>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Okeito's Angle</div>
+                        <div class="card-text">
+                            Speculation play. Small position (1-2% of portfolio). Monitor social sentiment and exchange listings. Sell into hype, buy during quiet periods. Not a core holding.
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Action Items</div>
+                        <div class="action-items">
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Set small DCA (1-2% of portfolio)</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Monitor Bonk integrations and burns</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Track social sentiment on Twitter/Reddit</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-checkbox"></div>
+                                <div class="action-text">Set take-profit targets (2x, 5x, 10x)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Resources</div>
+                        <a href="#" class="source-link">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+                            </svg>
+                            Bonk Community Dashboard
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <div>Solana Alpha Scanner</div>
-            <div style="margin-top: 4px; opacity: 0.6;">Updated daily with new opportunities</div>
+            <div>Solana Alpha Dashboard</div>
+            <div style="margin-top: 4px; opacity: 0.6;">Updated automatically when new opportunities are found</div>
         </div>
     </main>
 
     <script>
+        function toggleCard(header) {
+            const card = header.parentElement;
+            const body = card.querySelector('.card-body');
+            const icon = header.querySelector('.expand-icon');
+            
+            body.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+
         const filterBtns = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.token-card');
 
@@ -726,10 +931,10 @@
                 cards.forEach(card => {
                     if (filter === 'all') {
                         card.style.display = 'block';
-                    } else if (filter === 'hold-to-earn') {
-                        card.style.display = card.dataset.hold === 'yes' ? 'block' : 'none';
+                    } else if (filter === 'high-conviction') {
+                        card.style.display = parseInt(card.dataset.score) >= 7 ? 'block' : 'none';
                     } else {
-                        card.style.display = card.dataset.type === filter ? 'block' : 'none';
+                        card.style.display = card.dataset.category === filter ? 'block' : 'none';
                     }
                 });
 
@@ -740,25 +945,24 @@
         function updateStats() {
             const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
             const total = visibleCards.length;
-            const holdToEarn = visibleCards.filter(c => c.dataset.hold === 'yes').length;
+            const highMatch = visibleCards.filter(c => parseInt(c.dataset.score) >= 7).length;
+            const lowRisk = visibleCards.filter(c => c.dataset.risk === 'low').length;
             const avgScore = total > 0 
                 ? (visibleCards.reduce((sum, c) => sum + parseInt(c.dataset.score), 0) / total).toFixed(1)
                 : '0.0';
-            const positive = visibleCards.filter(c => c.querySelector('.change-positive')).length;
 
-            document.getElementById('total-tokens').textContent = total;
-            document.getElementById('hold-to-earn').textContent = holdToEarn;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('high-match-count').textContent = highMatch;
+            document.getElementById('low-risk-count').textContent = lowRisk;
             document.getElementById('avg-score').textContent = avgScore;
-            document.getElementById('positive-change').textContent = positive;
         }
 
-        function toggleWatch(btn) {
-            btn.classList.toggle('watched');
-            const isWatched = btn.classList.contains('watched');
-            btn.innerHTML = isWatched 
-                ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Watched`
-                : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Mark as Watched`;
-        }
+        document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('checked');
+            });
+        });
 
         updateStats();
     </script>
