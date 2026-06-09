@@ -1,970 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solana Alpha | Mission Control</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #050508;
-            --bg-secondary: #0a0a0f;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-hover: rgba(255, 255, 255, 0.06);
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.35);
-            --accent: #00d4ff;
-            --accent-dim: rgba(0, 212, 255, 0.15);
-            --accent-glow: rgba(0, 212, 255, 0.3);
-            --success: #00ff88;
-            --success-dim: rgba(0, 255, 136, 0.15);
-            --warning: #ffaa00;
-            --warning-dim: rgba(255, 170, 0, 0.15);
-            --danger: #ff4444;
-            --danger-dim: rgba(255, 68, 68, 0.15);
-            --gradient-start: #00d4ff;
-            --gradient-end: #7b2ff7;
-            --font-display: 'Space Grotesk', sans-serif;
-            --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 80%, rgba(123, 47, 247, 0.03) 0%, transparent 50%);
-            animation: bgPulse 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes bgPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(5, 5, 8, 0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 24px;
-        }
-
-        .header-content { max-width: 900px; margin: 0 auto; }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 16px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 18px;
-            color: white;
-            box-shadow: 0 0 30px var(--accent-glow);
-            animation: iconPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-            50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(0, 212, 255, 0.1); }
-        }
-
-        .logo-text {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--text-primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 20px;
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .stats-bar::-webkit-scrollbar { display: none; }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 80px;
-            position: relative;
-        }
-
-        .stat::after {
-            content: '';
-            position: absolute;
-            right: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1px;
-            height: 60%;
-            background: var(--border);
-        }
-
-        .stat:last-child::after { display: none; }
-
-        .stat-value {
-            font-family: var(--font-mono);
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--accent);
-            text-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .stat-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .filters {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            position: relative;
-            z-index: 1;
-        }
-
-        .filters::-webkit-scrollbar { display: none; }
-
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .filter-btn {
-            padding: 10px 20px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-            font-family: var(--font-body);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, var(--accent-dim), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
-        }
-
-        .filter-btn:hover::before { opacity: 1; }
-
-        .filter-btn.active {
-            background: var(--accent-dim);
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        .main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--border), transparent);
-        }
-
-        .token-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .token-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .token-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 212, 255, 0.1);
-        }
-
-        .token-card:hover::before { opacity: 0.5; }
-
-        .card-header {
-            padding: 24px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-        }
-
-        .card-header-left { flex: 1; min-width: 0; }
-
-        .token-symbol {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--accent);
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .card-title {
-            font-family: var(--font-display);
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            line-height: 1.3;
-            letter-spacing: -0.3px;
-        }
-
-        .card-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .badge-category {
-            background: var(--accent-dim);
-            color: var(--accent);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-        }
-
-        .badge-momentum-high {
-            background: var(--success-dim);
-            color: var(--success);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        .badge-momentum-med {
-            background: var(--warning-dim);
-            color: var(--warning);
-            border: 1px solid rgba(255, 170, 0, 0.2);
-        }
-
-        .badge-momentum-low {
-            background: var(--danger-dim);
-            color: var(--danger);
-            border: 1px solid rgba(255, 68, 68, 0.2);
-        }
-
-        .badge-risk {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-
-        .score-ring {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-mono);
-            font-size: 18px;
-            font-weight: 700;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .score-ring::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            padding: 3px;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .score-value {
-            background: var(--bg-primary);
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.5s ease;
-        }
-
-        .card-body.expanded {
-            max-height: 2000px;
-            padding: 0 24px 24px;
-        }
-
-        .card-section { margin-bottom: 24px; }
-
-        .card-section-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-        }
-
-        .card-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .card-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .card-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .card-list li:last-child { border-bottom: none; }
-
-        .card-list li::before {
-            content: '›';
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .card-list li:hover {
-            color: var(--text-primary);
-            padding-left: 4px;
-        }
-
-        .action-items {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .action-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .action-item:hover {
-            border-color: var(--border-hover);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .action-checkbox {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            border: 2px solid var(--border-hover);
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-checkbox:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .action-checkbox.checked {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .action-checkbox.checked::after {
-            content: '✓';
-            color: var(--bg-primary);
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .action-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-        }
-
-        .action-item:hover .action-text { color: var(--text-primary); }
-
-        .source-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: var(--accent-dim);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-        }
-
-        .source-link:hover {
-            background: rgba(0, 212, 255, 0.25);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .expand-icon {
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            color: var(--text-muted);
-            flex-shrink: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .expand-icon.rotated { transform: rotate(180deg); }
-
-        .footer {
-            text-align: center;
-            padding: 48px 24px;
-            color: var(--text-muted);
-            font-size: 12px;
-            border-top: 1px solid var(--border);
-            margin-top: 48px;
-            position: relative;
-            z-index: 1;
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .token-card {
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .token-card:nth-child(1) { animation-delay: 0.1s; }
-        .token-card:nth-child(2) { animation-delay: 0.2s; }
-        .token-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .stat {
-            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .stat:nth-child(1) { animation-delay: 0.1s; }
-        .stat:nth-child(2) { animation-delay: 0.2s; }
-        .stat:nth-child(3) { animation-delay: 0.3s; }
-        .stat:nth-child(4) { animation-delay: 0.4s; }
-
-        @media (max-width: 640px) {
-            .header { padding: 16px 20px; }
-            .main { padding: 20px; }
-            .card-header { padding: 20px; }
-            .card-title { font-size: 18px; }
-            .score-ring { width: 44px; height: 44px; font-size: 15px; }
-            .stat-value { font-size: 20px; }
-        }
-
-        .score-high { animation: glowPulse 2s ease-in-out infinite; }
-
-        @keyframes glowPulse {
-            0%, 100% { text-shadow: 0 0 20px var(--accent-glow); }
-            50% { text-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(0, 212, 255, 0.2); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solana Alpha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f5f0;
+      --surface: #fbfbf8;
+      --border: rgba(26, 26, 46, 0.12);
+      --text: #1a1a2e;
+      --muted: rgba(26, 26, 46, 0.62);
+      --accent: #00d4ff;
+      --accent-soft: rgba(0, 212, 255, 0.12);
+      --display: 'Space Grotesk', sans-serif;
+      --body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+
+    .top {
+      margin-bottom: 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 3.2vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .primary-action {
+      border: 1px solid transparent;
+      background: var(--text);
+      color: #fff;
+      font-family: var(--body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      box-shadow: 0 8px 20px rgba(26, 26, 46, 0.12);
+    }
+
+    .primary-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(26, 26, 46, 0.18);
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      max-height: calc(100vh - 230px);
+      overflow-y: auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(26,26,46,.25) transparent;
+    }
+
+    .list::-webkit-scrollbar { width: 6px; }
+    .list::-webkit-scrollbar-thumb { background: rgba(26,26,46,.25); border-radius: 999px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      animation: rise 360ms ease both;
+    }
+
+    .card:nth-child(2) { animation-delay: 70ms; }
+    .card:nth-child(3) { animation-delay: 140ms; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 26px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .token {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .name {
+      font-family: var(--display);
+      font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+    }
+
+    .price {
+      font-family: var(--mono);
+      font-size: 1.02rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--accent-soft);
+      border: 1px solid rgba(0, 212, 255, 0.32);
+      padding: 7px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .section + .section { margin-top: 22px; }
+
+    .section h3 {
+      font-family: var(--display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+    }
+
+    .section p,
+    .section li {
+      color: var(--muted);
+      font-size: 0.97rem;
+    }
+
+    ul { list-style: none; }
+
+    li {
+      position: relative;
+      padding-left: 16px;
+      margin: 7px 0;
+    }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.75;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: 4px;
+    }
+
+    .action {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 2px;
+    }
+
+    .check {
+      width: 16px;
+      height: 16px;
+      margin-top: 3px;
+      border: 1.5px solid rgba(26, 26, 46, 0.26);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 140ms ease;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .check:hover { border-color: rgba(26, 26, 46, 0.42); }
+
+    .check.done {
+      border-color: var(--accent);
+      background: rgba(0, 212, 255, 0.16);
+    }
+
+    .check.done::after {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 4px;
+      border: 1.6px solid var(--text);
+      border-top: 0;
+      border-right: 0;
+      transform: rotate(-45deg);
+      left: 3px;
+      top: 4px;
+      opacity: 0.75;
+    }
+
+    .action span {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .resource {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(26, 26, 46, 0.24);
+      font-size: 0.9rem;
+      transition: color 140ms ease, border-color 140ms ease;
+    }
+
+    .resource:hover {
+      color: #009fc0;
+      border-color: rgba(0, 212, 255, 0.65);
+    }
+
+    @media (max-width: 720px) {
+      .page { padding: 32px 18px 52px; }
+      .card { padding: 22px; border-radius: 16px; }
+      .card-head { margin-bottom: 20px; padding-bottom: 14px; }
+      .list { max-height: none; overflow: visible; }
+      .primary-action { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">S</div>
-                <div>
-                    <div class="logo-text">Solana Alpha</div>
-                    <div class="subtitle">Token Intelligence // v1.0</div>
-                </div>
-            </div>
-            <div class="stats-bar">
-                <div class="stat">
-                    <div class="stat-value" id="total-count">3</div>
-                    <div class="stat-label">Tokens</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="high-match-count">2</div>
-                    <div class="stat-label">High Conviction</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="low-risk-count">1</div>
-                    <div class="stat-label">Low Risk</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="avg-score">7.3</div>
-                    <div class="stat-label">Avg Score</div>
-                </div>
-            </div>
-        </div>
+  <div class="page">
+    <header class="top">
+      <div>
+        <h1>Solana Alpha</h1>
+        <p class="subtitle">Focused token intelligence. No noise.</p>
+      </div>
+      <button class="primary-action" type="button">Start daily review</button>
     </header>
 
-    <div class="filters">
-        <div class="filter-group">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="defi">DeFi</button>
-            <button class="filter-btn" data-filter="nft">NFT</button>
-            <button class="filter-btn" data-filter="gaming">Gaming</button>
-            <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
-            <button class="filter-btn" data-filter="high-conviction">High Conviction</button>
-        </div>
-    </div>
-
-    <main class="main">
-        <div class="section-title">Active Opportunities</div>
-        
-        <div id="tokens-container">
-            <div class="token-card" data-category="defi" data-risk="medium" data-momentum="high" data-score="8">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <div class="token-symbol">$JUP</div>
-                        <div class="card-title">Jupiter Exchange</div>
-                        <div class="card-meta">
-                            <span class="badge badge-category">DeFi</span>
-                            <span class="badge badge-momentum-high">High Momentum</span>
-                            <span class="badge badge-risk">Medium Risk</span>
-                        </div>
-                    </div>
-                    <div class="score-ring score-high">
-                        <div class="score-value">8</div>
-                    </div>
-                    <div class="expand-icon">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 6l4 4 4-4"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-section">
-                        <div class="card-section-title">The Thesis</div>
-                        <div class="card-text">
-                            Jupiter is the dominant DEX aggregator on Solana, handling 60%+ of all swap volume. With the launch of JUP token and governance, there's a clear path to value accrual through fee sharing and staking rewards.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Why It Works</div>
-                        <ul class="card-list">
-                            <li>Market leader: 60%+ of Solana DEX volume</li>
-                            <li>Real yield: Fees from swaps accrue to stakers</li>
-                            <li>Governance: Token holders vote on fee structures</li>
-                            <li>Ecosystem: Launchpad and perpetuals expanding</li>
-                        </ul>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Okeito's Angle</div>
-                        <div class="card-text">
-                            Core infrastructure play. Jupiter is the Uniswap of Solana — if Solana grows, Jupiter grows. Stake JUP for governance + yield. Monitor volume trends as leading indicator.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Action Items</div>
-                        <div class="action-items">
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Research JUP staking APY and lock periods</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Set up DCA strategy for JUP accumulation</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Monitor Jupiter volume vs competitors</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Research Jupiter Launchpad opportunities</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Resources</div>
-                        <a href="#" class="source-link">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-                            </svg>
-                            Jupiter Analytics Dashboard
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="token-card" data-category="infrastructure" data-risk="low" data-momentum="medium" data-score="7">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <div class="token-symbol">$SOL</div>
-                        <div class="card-title">Solana</div>
-                        <div class="card-meta">
-                            <span class="badge badge-category">Infrastructure</span>
-                            <span class="badge badge-momentum-med">Steady</span>
-                            <span class="badge badge-risk">Low Risk</span>
-                        </div>
-                    </div>
-                    <div class="score-ring">
-                        <div class="score-value">7</div>
-                    </div>
-                    <div class="expand-icon">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 6l4 4 4-4"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-section">
-                        <div class="card-section-title">The Thesis</div>
-                        <div class="card-text">
-                            Solana is the fastest, cheapest L1 with real adoption. Firedancer upgrade coming Q1 2025 will 10x throughput. Institutional interest growing (PayPal, Visa pilots). The "ETH killer" narrative is back, but this time with metrics.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Why It Works</div>
-                        <ul class="card-list">
-                            <li>Speed: 65K TPS, sub-second finality</li>
-                            <li>Cost: $0.00025 per transaction</li>
-                            <li>Adoption: 2M+ active addresses daily</li>
-                            <li>Institutional: PayPal, Visa, Shopify integrations</li>
-                        </ul>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Okeito's Angle</div>
-                        <div class="card-text">
-                            Core holding. Solana is the "index bet" on crypto consumer apps. Stake for 6-8% APY. Use as collateral for DeFi plays. Monitor Firedancer launch and institutional announcements.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Action Items</div>
-                        <div class="action-items">
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Stake SOL for yield (Marinade or Jito)</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Set price alerts for $80, $120, $200</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Research Firedancer upgrade timeline</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Monitor institutional adoption news</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Resources</div>
-                        <a href="#" class="source-link">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-                            </svg>
-                            Solana Compass Analytics
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="token-card" data-category="gaming" data-risk="high" data-momentum="high" data-score="6">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <div class="card-header-left">
-                        <div class="token-symbol">$BONK</div>
-                        <div class="card-title">Bonk</div>
-                        <div class="card-meta">
-                            <span class="badge badge-category">Gaming/Meme</span>
-                            <span class="badge badge-momentum-high">High Momentum</span>
-                            <span class="badge badge-risk">High Risk</span>
-                        </div>
-                    </div>
-                    <div class="score-ring">
-                        <div class="score-value">6</div>
-                    </div>
-                    <div class="expand-icon">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 6l4 4 4-4"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-section">
-                        <div class="card-section-title">The Thesis</div>
-                        <div class="card-text">
-                            Bonk is the "Dogecoin of Solana" but with actual utility. Integrated into 50+ dApps, used for NFT mints, gaming, and tipping. Community-driven with organic growth. High risk but asymmetric upside if Solana meme season returns.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Why It Works</div>
-                        <ul class="card-list">
-                            <li>Distribution: Airdropped to 1M+ wallets</li>
-                            <li>Utility: 50+ integrations across Solana</li>
-                            <li>Community: Active, organic growth</li>
-                            <li>Asymmetric: Small position → large upside</li>
-                        </ul>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Okeito's Angle</div>
-                        <div class="card-text">
-                            Speculation play. Small position (1-2% of portfolio). Monitor social sentiment and exchange listings. Sell into hype, buy during quiet periods. Not a core holding.
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Action Items</div>
-                        <div class="action-items">
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Set small DCA (1-2% of portfolio)</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Monitor Bonk integrations and burns</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Track social sentiment on Twitter/Reddit</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-checkbox"></div>
-                                <div class="action-text">Set take-profit targets (2x, 5x, 10x)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-section">
-                        <div class="card-section-title">Resources</div>
-                        <a href="#" class="source-link">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-                            </svg>
-                            Bonk Community Dashboard
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <main class="list">
+      <article class="card">
+        <div class="card-head">
+          <div>
+            <div class="token">$JUP</div>
+            <h2 class="name">Jupiter Exchange</h2>
+          </div>
+          <div class="price">$1.08</div>
         </div>
 
-        <div class="footer">
-            <div>Solana Alpha Dashboard</div>
-            <div style="margin-top: 4px; opacity: 0.6;">Updated automatically when new opportunities are found</div>
+        <section class="section">
+          <h3>The Thesis</h3>
+          <p>Jupiter is the dominant DEX aggregator on Solana, handling 60%+ of swap volume. With JUP governance and staking, there is a visible path to long-term value accrual.</p>
+        </section>
+
+        <section class="section">
+          <h3>Why It Works</h3>
+          <ul>
+            <li>Market leader with sustained volume leadership</li>
+            <li>Fee flow supports staking and long-term retention</li>
+            <li>Governance control over key protocol decisions</li>
+            <li>Expansion through launchpad and perpetual products</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h3>Okeito's Angle</h3>
+          <p>Core infrastructure exposure. If Solana grows, Jupiter likely captures disproportionate transaction value. Watch volume trends as the leading indicator.</p>
+        </section>
+
+        <section class="section">
+          <h3>Action Items</h3>
+          <div class="actions">
+            <label class="action"><button class="check" type="button" aria-label="Research JUP staking APY and lock periods"></button><span>Research JUP staking APY and lock periods</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Set up DCA strategy for JUP accumulation"></button><span>Set up DCA strategy for JUP accumulation</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Monitor Jupiter volume vs competitors"></button><span>Monitor Jupiter volume vs competitors</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Research Jupiter launchpad opportunities"></button><span>Research Jupiter launchpad opportunities</span></label>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Resource</h3>
+          <a class="resource" href="#">Jupiter Analytics Dashboard</a>
+        </section>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div>
+            <div class="token">$SOL</div>
+            <h2 class="name">Solana</h2>
+          </div>
+          <div class="price">$172.40</div>
         </div>
+
+        <section class="section">
+          <h3>The Thesis</h3>
+          <p>Solana remains a high-throughput, low-cost L1 with growing real-world adoption. The next infrastructure upgrades and institutional integrations can continue compounding network value.</p>
+        </section>
+
+        <section class="section">
+          <h3>Why It Works</h3>
+          <ul>
+            <li>High throughput with low latency finality</li>
+            <li>Extremely low transaction fees for consumer apps</li>
+            <li>Strong active address and app ecosystem metrics</li>
+            <li>Institutional pilots expand credibility and demand</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h3>Okeito's Angle</h3>
+          <p>Core holding and index-style exposure to Solana’s consumer app growth. Stake for base yield, then deploy selectively into higher-upside opportunities.</p>
+        </section>
+
+        <section class="section">
+          <h3>Action Items</h3>
+          <div class="actions">
+            <label class="action"><button class="check" type="button" aria-label="Stake SOL for yield"></button><span>Stake SOL for yield (Marinade or Jito)</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Set SOL price alerts"></button><span>Set price alerts for $80, $120, $200</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Track Firedancer timeline"></button><span>Track Firedancer upgrade timeline</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Monitor institutional adoption news"></button><span>Monitor institutional adoption news</span></label>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Resource</h3>
+          <a class="resource" href="#">Solana Compass Analytics</a>
+        </section>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div>
+            <div class="token">$BONK</div>
+            <h2 class="name">Bonk</h2>
+          </div>
+          <div class="price">$0.000028</div>
+        </div>
+
+        <section class="section">
+          <h3>The Thesis</h3>
+          <p>Bonk is a high-volatility community token with broad integration across Solana apps. It carries significant risk but can outperform sharply in strong meme cycles.</p>
+        </section>
+
+        <section class="section">
+          <h3>Why It Works</h3>
+          <ul>
+            <li>Wide wallet distribution from original airdrop</li>
+            <li>Utility integrations across multiple dApps</li>
+            <li>Strong social velocity and community participation</li>
+            <li>Asymmetric upside in risk-on market phases</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h3>Okeito's Angle</h3>
+          <p>Pure speculation sleeve, kept intentionally small. Buy quiet periods, trim aggressively into hype, and keep strict take-profit discipline.</p>
+        </section>
+
+        <section class="section">
+          <h3>Action Items</h3>
+          <div class="actions">
+            <label class="action"><button class="check" type="button" aria-label="Set small BONK DCA"></button><span>Set small DCA (1–2% of portfolio)</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Monitor BONK integrations and burns"></button><span>Monitor Bonk integrations and burns</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Track social sentiment"></button><span>Track social sentiment on X and Reddit</span></label>
+            <label class="action"><button class="check" type="button" aria-label="Set BONK take-profit targets"></button><span>Set take-profit targets (2x, 5x, 10x)</span></label>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Resource</h3>
+          <a class="resource" href="#">Bonk Community Dashboard</a>
+        </section>
+      </article>
     </main>
+  </div>
 
-    <script>
-        function toggleCard(header) {
-            const card = header.parentElement;
-            const body = card.querySelector('.card-body');
-            const icon = header.querySelector('.expand-icon');
-            
-            body.classList.toggle('expanded');
-            icon.classList.toggle('rotated');
-        }
-
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.token-card');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const filter = btn.dataset.filter;
-
-                cards.forEach(card => {
-                    if (filter === 'all') {
-                        card.style.display = 'block';
-                    } else if (filter === 'high-conviction') {
-                        card.style.display = parseInt(card.dataset.score) >= 7 ? 'block' : 'none';
-                    } else {
-                        card.style.display = card.dataset.category === filter ? 'block' : 'none';
-                    }
-                });
-
-                updateStats();
-            });
-        });
-
-        function updateStats() {
-            const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
-            const total = visibleCards.length;
-            const highMatch = visibleCards.filter(c => parseInt(c.dataset.score) >= 7).length;
-            const lowRisk = visibleCards.filter(c => c.dataset.risk === 'low').length;
-            const avgScore = total > 0 
-                ? (visibleCards.reduce((sum, c) => sum + parseInt(c.dataset.score), 0) / total).toFixed(1)
-                : '0.0';
-
-            document.getElementById('total-count').textContent = total;
-            document.getElementById('high-match-count').textContent = highMatch;
-            document.getElementById('low-risk-count').textContent = lowRisk;
-            document.getElementById('avg-score').textContent = avgScore;
-        }
-
-        document.querySelectorAll('.action-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', function(e) {
-                e.stopPropagation();
-                this.classList.toggle('checked');
-            });
-        });
-
-        updateStats();
-    </script>
+  <script>
+    document.querySelectorAll('.check').forEach((check) => {
+      check.addEventListener('click', () => check.classList.toggle('done'));
+    });
+  </script>
 </body>
 </html>
