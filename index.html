@@ -30,6 +30,15 @@
     .num{font-variant-numeric:tabular-nums;text-align:right}.chg.pos{color:var(--pos)}.chg.neg{color:var(--neg)}
     .meta{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:var(--muted);margin-top:6px}
     .empty,.loading{color:var(--muted);font-size:.92rem;padding:6px 2px}
+    .scout{margin-top:14px}
+    .scout .row{padding:12px}
+    .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+    .badge.new{background:#eef4ff;color:#2a4bcf}
+    .badge.conf-high{background:#e8fff2;color:#067647}
+    .badge.conf-mid{background:#fff7e6;color:#b54708}
+    .badge.conf-low{background:#ffeceb;color:#b42318}
+    .labels{display:flex;gap:6px;flex-wrap:wrap}
+    .mechanic{font-size:.84rem;color:#3a3a4f;margin-top:7px;line-height:1.35}
     a{color:inherit}
   </style>
 </head>
@@ -57,6 +66,13 @@
       <article class="panel">
         <h2>Trending</h2>
         <div class="list" id="trending"><div class="loading">Loading live data…</div></div>
+      </article>
+    </section>
+
+    <section class="scout">
+      <article class="panel">
+        <h2>Scout Finds</h2>
+        <div class="list" id="scoutFinds"><div class="loading">Loading curated scout data…</div></div>
       </article>
     </section>
   </div>
@@ -104,21 +120,67 @@
       el.innerHTML = arr.slice(0,10).map((t)=>tokenRow(t, withAge)).join('');
     }
 
+    function confidenceClass(conf){
+      const n = Number(conf||0);
+      if(n >= 75) return 'conf-high';
+      if(n >= 50) return 'conf-mid';
+      return 'conf-low';
+    }
+
+    function scoutRow(t){
+      const conf = Number(t.confidence||0);
+      return `<div class="row">
+        <div class="top">
+          <div>
+            <div class="sym">${t.name} <span class="name">$${t.ticker}</span></div>
+            <div class="name">MCap ${t.marketCap || 'n/a'}</div>
+          </div>
+          <div class="labels">
+            ${t.isNew ? '<span class="badge new">New</span>' : ''}
+            <span class="badge ${confidenceClass(conf)}">${conf}/100</span>
+          </div>
+        </div>
+        <div class="mechanic">${t.rewardMechanic || 'Hold-to-earn mechanics tracked by scout.'}</div>
+      </div>`;
+    }
+
+    function renderScout(arr){
+      const el = document.getElementById('scoutFinds');
+      if(!arr || !arr.length){
+        el.innerHTML = '<div class="empty">No scout findings available yet.</div>';
+        return;
+      }
+      el.innerHTML = arr.slice(0,8).map(scoutRow).join('');
+    }
+
     async function load(){
       try{
-        const res = await fetch('./data/live-data.json?ts='+Date.now(), {cache:'no-store'});
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const [liveRes, scoutRes] = await Promise.all([
+          fetch('./data/live-data.json?ts='+Date.now(), {cache:'no-store'}),
+          fetch('./data/scout-findings.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null)
+        ]);
+
+        if(!liveRes.ok) throw new Error(`HTTP ${liveRes.status}`);
+        const data = await liveRes.json();
         renderOverview(data.marketOverview || {});
         renderList('gainers', data.topGainers || []);
         renderList('newListings', data.newListings || [], true);
         renderList('trending', data.trending || []);
+
+        if(scoutRes && scoutRes.ok){
+          const scoutData = await scoutRes.json();
+          renderScout(scoutData.tokens || []);
+        } else {
+          renderScout([]);
+        }
+
         const updated = data.generatedAt ? new Date(data.generatedAt) : new Date();
         document.getElementById('updatedAt').textContent = `Last update: ${updated.toLocaleString('en-AU', {timeZone:'Australia/Melbourne'})}`;
       }catch(err){
         ['gainers','newListings','trending'].forEach((id)=>{
           document.getElementById(id).innerHTML = `<div class="empty">Failed to load live data (${err.message}).</div>`;
         });
+        document.getElementById('scoutFinds').innerHTML = '<div class="empty">Failed to load scout findings.</div>';
         document.getElementById('updatedAt').textContent = 'Last update: unavailable';
       }
     }

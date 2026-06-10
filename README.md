@@ -13,14 +13,15 @@ This dashboard now renders **real Solana market data** from API-generated JSON (
   - **Top Gainers (24h)**
   - **New Listings (last 72h)**
   - **Trending** (boosted + high-volume tokens)
+- Builds curated scout feed from markdown reports/database into `data/scout-findings.json`
 - Reads scout context from `memory/scout-findings/` when available and stores summary metadata
 - Writes output to `data/live-data.json`
-- Frontend (`index.html`) fetches this JSON and renders live cards
+- Frontend (`index.html`) fetches both JSON files and renders live cards + Scout Finds
 
 ## Local run
 
 ```bash
-npm run fetch:data
+npm run build:data
 ```
 
 Then open `index.html` with a static server (or via GitHub Pages) and it will load `data/live-data.json`.
@@ -30,7 +31,7 @@ Then open `index.html` with a static server (or via GitHub Pages) and it will lo
 Workflow: `.github/workflows/live-data-update.yml`
 
 - Runs every hour (`7 * * * *`)
-- Regenerates `data/live-data.json`
+- Regenerates `data/live-data.json` and `data/scout-findings.json`
 - Commits/pushes only when data changed
 - GitHub Pages serves latest committed data
 
