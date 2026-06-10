@@ -2,417 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Solana Alpha</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solana Alpha — Live</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #f5f5f0;
-      --surface: #fbfbf8;
-      --border: rgba(26, 26, 46, 0.12);
-      --text: #1a1a2e;
-      --muted: rgba(26, 26, 46, 0.62);
-      --accent: #00d4ff;
-      --accent-soft: rgba(0, 212, 255, 0.12);
-      --display: 'Space Grotesk', sans-serif;
-      --body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--body);
-      line-height: 1.65;
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-
-    .page {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-    }
-
-    .top {
-      margin-bottom: 36px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-family: var(--display);
-      font-size: clamp(2rem, 3.2vw, 2.6rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-    }
-
-    .subtitle {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .primary-action {
-      border: 1px solid transparent;
-      background: var(--text);
-      color: #fff;
-      font-family: var(--body);
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 11px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-      box-shadow: 0 8px 20px rgba(26, 26, 46, 0.12);
-    }
-
-    .primary-action:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(26, 26, 46, 0.18);
-    }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      max-height: calc(100vh - 230px);
-      overflow-y: auto;
-      padding-right: 6px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(26,26,46,.25) transparent;
-    }
-
-    .list::-webkit-scrollbar { width: 6px; }
-    .list::-webkit-scrollbar-thumb { background: rgba(26,26,46,.25); border-radius: 999px; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      animation: rise 360ms ease both;
-    }
-
-    .card:nth-child(2) { animation-delay: 70ms; }
-    .card:nth-child(3) { animation-delay: 140ms; }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 26px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .token {
-      font-family: var(--mono);
-      color: var(--accent);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-    }
-
-    .name {
-      font-family: var(--display);
-      font-size: clamp(1.35rem, 2.2vw, 1.65rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.18;
-    }
-
-    .price {
-      font-family: var(--mono);
-      font-size: 1.02rem;
-      font-weight: 500;
-      color: var(--text);
-      background: var(--accent-soft);
-      border: 1px solid rgba(0, 212, 255, 0.32);
-      padding: 7px 10px;
-      border-radius: 10px;
-      white-space: nowrap;
-    }
-
-    .section + .section { margin-top: 22px; }
-
-    .section h3 {
-      font-family: var(--display);
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      margin-bottom: 10px;
-    }
-
-    .section p,
-    .section li {
-      color: var(--muted);
-      font-size: 0.97rem;
-    }
-
-    ul { list-style: none; }
-
-    li {
-      position: relative;
-      padding-left: 16px;
-      margin: 7px 0;
-    }
-
-    li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.72em;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.75;
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      margin-top: 4px;
-    }
-
-    .action {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 8px 2px;
-    }
-
-    .check {
-      width: 16px;
-      height: 16px;
-      margin-top: 3px;
-      border: 1.5px solid rgba(26, 26, 46, 0.26);
-      border-radius: 4px;
-      background: transparent;
-      cursor: pointer;
-      transition: all 140ms ease;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .check:hover { border-color: rgba(26, 26, 46, 0.42); }
-
-    .check.done {
-      border-color: var(--accent);
-      background: rgba(0, 212, 255, 0.16);
-    }
-
-    .check.done::after {
-      content: '';
-      position: absolute;
-      width: 7px;
-      height: 4px;
-      border: 1.6px solid var(--text);
-      border-top: 0;
-      border-right: 0;
-      transform: rotate(-45deg);
-      left: 3px;
-      top: 4px;
-      opacity: 0.75;
-    }
-
-    .action span {
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-
-    .resource {
-      display: inline-block;
-      margin-top: 12px;
-      color: var(--text);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(26, 26, 46, 0.24);
-      font-size: 0.9rem;
-      transition: color 140ms ease, border-color 140ms ease;
-    }
-
-    .resource:hover {
-      color: #009fc0;
-      border-color: rgba(0, 212, 255, 0.65);
-    }
-
-    @media (max-width: 720px) {
-      .page { padding: 32px 18px 52px; }
-      .card { padding: 22px; border-radius: 16px; }
-      .card-head { margin-bottom: 20px; padding-bottom: 14px; }
-      .list { max-height: none; overflow: visible; }
-      .primary-action { width: 100%; }
-    }
+    :root{--bg:#f6f6f2;--surface:#fff;--text:#171728;--muted:#66667a;--border:#e4e4ef;--pos:#00875a;--neg:#d92d20}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 18px 56px}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);margin:0}
+    .sub{margin:8px 0 0;color:var(--muted)}
+    .bar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
+    .updated{font-size:.92rem;color:var(--muted)}
+    .overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:20px 0 24px}
+    .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+    .stat .k{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .stat .v{font-size:1.1rem;font-weight:700;margin-top:4px}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media (min-width:920px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+    .panel h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;margin:2px 0 10px}
+    .list{display:flex;flex-direction:column;gap:8px}
+    .row{border:1px solid var(--border);border-radius:10px;padding:10px}
+    .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .sym{font-weight:700}.name{font-size:.86rem;color:var(--muted)}
+    .num{font-variant-numeric:tabular-nums;text-align:right}.chg.pos{color:var(--pos)}.chg.neg{color:var(--neg)}
+    .meta{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:var(--muted);margin-top:6px}
+    .empty,.loading{color:var(--muted);font-size:.92rem;padding:6px 2px}
+    a{color:inherit}
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="top">
+  <div class="wrap">
+    <header class="bar">
       <div>
         <h1>Solana Alpha</h1>
-        <p class="subtitle">Focused token intelligence. No noise.</p>
+        <p class="sub">Live token intelligence from DexScreener + scout findings context.</p>
       </div>
-      <button class="primary-action" type="button">Start daily review</button>
+      <div class="updated" id="updatedAt">Updating…</div>
     </header>
 
-    <main class="list">
-      <article class="card">
-        <div class="card-head">
-          <div>
-            <div class="token">$JUP</div>
-            <h2 class="name">Jupiter Exchange</h2>
-          </div>
-          <div class="price">$1.08</div>
-        </div>
+    <section class="overview" id="overview"></section>
 
-        <section class="section">
-          <h3>The Thesis</h3>
-          <p>Jupiter is the dominant DEX aggregator on Solana, handling 60%+ of swap volume. With JUP governance and staking, there is a visible path to long-term value accrual.</p>
-        </section>
-
-        <section class="section">
-          <h3>Why It Works</h3>
-          <ul>
-            <li>Market leader with sustained volume leadership</li>
-            <li>Fee flow supports staking and long-term retention</li>
-            <li>Governance control over key protocol decisions</li>
-            <li>Expansion through launchpad and perpetual products</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <h3>Okeito's Angle</h3>
-          <p>Core infrastructure exposure. If Solana grows, Jupiter likely captures disproportionate transaction value. Watch volume trends as the leading indicator.</p>
-        </section>
-
-        <section class="section">
-          <h3>Action Items</h3>
-          <div class="actions">
-            <label class="action"><button class="check" type="button" aria-label="Research JUP staking APY and lock periods"></button><span>Research JUP staking APY and lock periods</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Set up DCA strategy for JUP accumulation"></button><span>Set up DCA strategy for JUP accumulation</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Monitor Jupiter volume vs competitors"></button><span>Monitor Jupiter volume vs competitors</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Research Jupiter launchpad opportunities"></button><span>Research Jupiter launchpad opportunities</span></label>
-          </div>
-        </section>
-
-        <section class="section">
-          <h3>Resource</h3>
-          <a class="resource" href="#">Jupiter Analytics Dashboard</a>
-        </section>
+    <section class="grid">
+      <article class="panel">
+        <h2>Top Gainers (24h)</h2>
+        <div class="list" id="gainers"><div class="loading">Loading live data…</div></div>
       </article>
-
-      <article class="card">
-        <div class="card-head">
-          <div>
-            <div class="token">$SOL</div>
-            <h2 class="name">Solana</h2>
-          </div>
-          <div class="price">$172.40</div>
-        </div>
-
-        <section class="section">
-          <h3>The Thesis</h3>
-          <p>Solana remains a high-throughput, low-cost L1 with growing real-world adoption. The next infrastructure upgrades and institutional integrations can continue compounding network value.</p>
-        </section>
-
-        <section class="section">
-          <h3>Why It Works</h3>
-          <ul>
-            <li>High throughput with low latency finality</li>
-            <li>Extremely low transaction fees for consumer apps</li>
-            <li>Strong active address and app ecosystem metrics</li>
-            <li>Institutional pilots expand credibility and demand</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <h3>Okeito's Angle</h3>
-          <p>Core holding and index-style exposure to Solana’s consumer app growth. Stake for base yield, then deploy selectively into higher-upside opportunities.</p>
-        </section>
-
-        <section class="section">
-          <h3>Action Items</h3>
-          <div class="actions">
-            <label class="action"><button class="check" type="button" aria-label="Stake SOL for yield"></button><span>Stake SOL for yield (Marinade or Jito)</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Set SOL price alerts"></button><span>Set price alerts for $80, $120, $200</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Track Firedancer timeline"></button><span>Track Firedancer upgrade timeline</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Monitor institutional adoption news"></button><span>Monitor institutional adoption news</span></label>
-          </div>
-        </section>
-
-        <section class="section">
-          <h3>Resource</h3>
-          <a class="resource" href="#">Solana Compass Analytics</a>
-        </section>
+      <article class="panel">
+        <h2>New Listings (72h)</h2>
+        <div class="list" id="newListings"><div class="loading">Loading live data…</div></div>
       </article>
-
-      <article class="card">
-        <div class="card-head">
-          <div>
-            <div class="token">$BONK</div>
-            <h2 class="name">Bonk</h2>
-          </div>
-          <div class="price">$0.000028</div>
-        </div>
-
-        <section class="section">
-          <h3>The Thesis</h3>
-          <p>Bonk is a high-volatility community token with broad integration across Solana apps. It carries significant risk but can outperform sharply in strong meme cycles.</p>
-        </section>
-
-        <section class="section">
-          <h3>Why It Works</h3>
-          <ul>
-            <li>Wide wallet distribution from original airdrop</li>
-            <li>Utility integrations across multiple dApps</li>
-            <li>Strong social velocity and community participation</li>
-            <li>Asymmetric upside in risk-on market phases</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <h3>Okeito's Angle</h3>
-          <p>Pure speculation sleeve, kept intentionally small. Buy quiet periods, trim aggressively into hype, and keep strict take-profit discipline.</p>
-        </section>
-
-        <section class="section">
-          <h3>Action Items</h3>
-          <div class="actions">
-            <label class="action"><button class="check" type="button" aria-label="Set small BONK DCA"></button><span>Set small DCA (1–2% of portfolio)</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Monitor BONK integrations and burns"></button><span>Monitor Bonk integrations and burns</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Track social sentiment"></button><span>Track social sentiment on X and Reddit</span></label>
-            <label class="action"><button class="check" type="button" aria-label="Set BONK take-profit targets"></button><span>Set take-profit targets (2x, 5x, 10x)</span></label>
-          </div>
-        </section>
-
-        <section class="section">
-          <h3>Resource</h3>
-          <a class="resource" href="#">Bonk Community Dashboard</a>
-        </section>
+      <article class="panel">
+        <h2>Trending</h2>
+        <div class="list" id="trending"><div class="loading">Loading live data…</div></div>
       </article>
-    </main>
+    </section>
   </div>
 
   <script>
-    document.querySelectorAll('.check').forEach((check) => {
-      check.addEventListener('click', () => check.classList.toggle('done'));
-    });
+    const money = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:n>=1?0:6}).format(Number(n||0));
+    const compactMoney = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:2}).format(Number(n||0));
+    const pct = (n)=> `${Number(n||0).toFixed(2)}%`;
+    const age = (ms)=>{
+      if(!ms) return 'n/a';
+      const h = Math.floor((Date.now()-ms)/36e5);
+      if(h<1) return '<1h';
+      if(h<24) return `${h}h`;
+      return `${Math.floor(h/24)}d`;
+    };
+
+    function renderOverview(m){
+      const data = [
+        ['Token Universe', m.tokenUniverse],
+        ['Investable', m.investableUniverse],
+        ['24h Volume', compactMoney(m.total24hVolumeUsd)],
+        ['Liquidity', compactMoney(m.totalLiquidityUsd)],
+        ['Avg 24h Change', pct(m.avg24hChangePct)],
+        ['Gainers / Losers', `${m.gainersCount} / ${m.losersCount}`]
+      ];
+      document.getElementById('overview').innerHTML = data.map(([k,v])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+    }
+
+    function tokenRow(t, withAge=false){
+      const chgClass = Number(t.priceChange24h) >= 0 ? 'pos' : 'neg';
+      const linkStart = t.url ? `<a href="${t.url}" target="_blank" rel="noopener noreferrer">` : '';
+      const linkEnd = t.url ? '</a>' : '';
+      return `<div class="row">${linkStart}
+        <div class="top">
+          <div><div class="sym">${t.symbol}</div><div class="name">${t.name}</div></div>
+          <div class="num"><div class="price">${money(t.priceUsd)}</div><div class="chg ${chgClass}">${pct(t.priceChange24h)}</div></div>
+        </div>
+        <div class="meta"><span>MCap ${compactMoney(t.marketCap)}</span><span>Vol ${compactMoney(t.volume24h)}</span>${withAge?`<span>${age(t.pairCreatedAt)}</span>`:''}</div>
+      ${linkEnd}</div>`;
+    }
+
+    function renderList(id, arr, withAge=false){
+      const el = document.getElementById(id);
+      if(!arr || !arr.length){el.innerHTML='<div class="empty">No live tokens matched current filters.</div>'; return;}
+      el.innerHTML = arr.slice(0,10).map((t)=>tokenRow(t, withAge)).join('');
+    }
+
+    async function load(){
+      try{
+        const res = await fetch('./data/live-data.json?ts='+Date.now(), {cache:'no-store'});
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        renderOverview(data.marketOverview || {});
+        renderList('gainers', data.topGainers || []);
+        renderList('newListings', data.newListings || [], true);
+        renderList('trending', data.trending || []);
+        const updated = data.generatedAt ? new Date(data.generatedAt) : new Date();
+        document.getElementById('updatedAt').textContent = `Last update: ${updated.toLocaleString('en-AU', {timeZone:'Australia/Melbourne'})}`;
+      }catch(err){
+        ['gainers','newListings','trending'].forEach((id)=>{
+          document.getElementById(id).innerHTML = `<div class="empty">Failed to load live data (${err.message}).</div>`;
+        });
+        document.getElementById('updatedAt').textContent = 'Last update: unavailable';
+      }
+    }
+
+    load();
   </script>
 </body>
 </html>

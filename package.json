@@ -1,0 +1,9 @@
+{
+  "name": "solana-alpha",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:data": "node scripts/fetch-live-data.mjs"
+  }
+}
