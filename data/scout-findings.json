@@ -1,49 +1,38 @@
 {
-  "generatedAt": "2026-06-10T07:13:51.878Z",
-  "source": {
-    "databasePath": "/Users/oktos/.openclaw/workspace/memory/scout-findings/database.md",
-    "latestReportPath": "/Users/oktos/.openclaw/workspace/reports/solana-scout/2026-06-07-report.md",
-    "latestReportFile": "2026-06-07-report.md"
-  },
-  "summary": {
-    "trackedCount": 90,
-    "latestReportCount": 3,
-    "totalDisplayed": 30
-  },
   "tokens": [
     {
       "name": "FLock.io",
       "ticker": "FLOCK",
-      "marketCap": "~$21.66M (under $100M ✓)",
-      "rewardMechanic": "gmFLOCK staking mechanism (launched recently) Lock FLOCK tokens for 0-365 days to earn gmFLOCK (non-transferable soul-bo",
+      "marketCap": "~$21.66M",
+      "rewardMechanic": "AI training / gmFLOCK staking rewards",
       "confidence": 75,
-      "firstSeen": null,
-      "isNew": true
+      "firstSeen": "2026-06-07",
+      "isNew": false
     },
     {
       "name": "ChainGPT",
       "ticker": "CGPT",
-      "marketCap": "~$18-97M (sources vary: CoinMarketCap ~$18M, OKX ~$97M — likely ~$18-20M circulating) ⚠️ **Verify before acting**",
-      "rewardMechanic": "Stake CGPT to earn CGPTsp (staking points) Weighted system granting higher governance power Unlocks tiered benefits and ",
-      "confidence": 65,
-      "firstSeen": null,
-      "isNew": true
+      "marketCap": "~$18-97M",
+      "rewardMechanic": "AI tools / CGPTsp staking rewards",
+      "confidence": 75,
+      "firstSeen": "2026-06-07",
+      "isNew": false
     },
     {
       "name": "Unit 00 - Rei",
       "ticker": "REI",
-      "marketCap": "~$19-28M (under $100M ✓)",
-      "rewardMechanic": "⚠️ **NOT CONFIRMED as hold-to-earn** — Research needed Project focuses on AI agent framework and autonomous decision-mak",
+      "marketCap": "~$19-28M",
+      "rewardMechanic": "AI agent framework / Staking unconfirmed",
       "confidence": 40,
-      "firstSeen": null,
-      "isNew": true
+      "firstSeen": "2026-06-07",
+      "isNew": false
     },
     {
       "name": "BERT",
       "ticker": "BERT",
       "marketCap": "~$13-17M",
       "rewardMechanic": "Memecoin / AI pet platform / NFT staking / Charity rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-06-06",
       "isNew": false
     },
@@ -52,7 +41,7 @@
       "ticker": "LOOT",
       "marketCap": "<$1M (pre-TGE)",
       "rewardMechanic": "Walk-to-earn / Location-based crypto rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-06-06",
       "isNew": false
     },
@@ -61,7 +50,7 @@
       "ticker": "ONRE",
       "marketCap": "~$100M+",
       "rewardMechanic": "RWA reinsurance / Yield-bearing ONyc token / 10-15% APY",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-06-06",
       "isNew": false
     },
@@ -70,7 +59,7 @@
       "ticker": "GLDY",
       "marketCap": "~$5-10M",
       "rewardMechanic": "Gold-backed token / Yield-bearing / 24/7 trading rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-06-06",
       "isNew": false
     },
@@ -79,7 +68,7 @@
       "ticker": "STAKE",
       "marketCap": "~$1.85M",
       "rewardMechanic": "Pump.fun fee staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-29",
       "isNew": false
     },
@@ -88,7 +77,7 @@
       "ticker": "ESF",
       "marketCap": "~$657K-$1.4M",
       "rewardMechanic": "Long-term staking / 36.5% capped APY",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-29",
       "isNew": false
     },
@@ -97,7 +86,7 @@
       "ticker": "ORBT",
       "marketCap": "~$184K",
       "rewardMechanic": "Launchpad staking / Buyback rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-29",
       "isNew": false
     },
@@ -106,7 +95,7 @@
       "ticker": "STREAM",
       "marketCap": "~$1.85M",
       "rewardMechanic": "Token ops platform / 45% APY staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-29",
       "isNew": false
     },
@@ -115,7 +104,7 @@
       "ticker": "SNS",
       "marketCap": "~$2.6-3.1M",
       "rewardMechanic": "Domain identity / Airdrop rewards for .sol holders",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -124,7 +113,7 @@
       "ticker": "JELLYJELLY",
       "marketCap": "~$51-57M",
       "rewardMechanic": "Staking ~25% APR",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -133,7 +122,7 @@
       "ticker": "ZAMA",
       "marketCap": "~$61-76M",
       "rewardMechanic": "FHE privacy / 5% staking inflation",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -142,7 +131,7 @@
       "ticker": "ARC",
       "marketCap": "~$63-67M",
       "rewardMechanic": "AI agent framework / Ecosystem staking",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -151,7 +140,7 @@
       "ticker": "MF",
       "marketCap": "~$23K-1.2M",
       "rewardMechanic": "Move-to-earn / Fitness challenge staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -160,7 +149,7 @@
       "ticker": "DOOD",
       "marketCap": "~$23.6-29.2M",
       "rewardMechanic": "NFT ecosystem / 90% APR staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -169,7 +158,7 @@
       "ticker": "REFLECTION",
       "marketCap": "~$2.6K",
       "rewardMechanic": "DeFi volatility capture / Automated SOL rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-28",
       "isNew": false
     },
@@ -178,7 +167,7 @@
       "ticker": "SLX",
       "marketCap": "~$46.9M",
       "rewardMechanic": "DeFi yield protocol / 20% APY staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-27",
       "isNew": false
     },
@@ -187,7 +176,7 @@
       "ticker": "HONEY",
       "marketCap": "~$11-12M",
       "rewardMechanic": "DePIN mapping / Drive-to-Earn rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-26",
       "isNew": false
     },
@@ -196,7 +185,7 @@
       "ticker": "SHDW",
       "marketCap": "~$4-5M",
       "rewardMechanic": "DePIN storage / Node staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-26",
       "isNew": false
     },
@@ -205,7 +194,7 @@
       "ticker": "POLIS",
       "marketCap": "~$3.8-4.4M",
       "rewardMechanic": "Gaming governance / Staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-26",
       "isNew": false
     },
@@ -214,7 +203,7 @@
       "ticker": "LIKE",
       "marketCap": "~$500K-1M",
       "rewardMechanic": "Social platform / Creator staking pools",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-26",
       "isNew": false
     },
@@ -223,7 +212,7 @@
       "ticker": "IO",
       "marketCap": "~$43-49M",
       "rewardMechanic": "DePIN GPU compute / Staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-22",
       "isNew": false
     },
@@ -232,7 +221,7 @@
       "ticker": "ATH",
       "marketCap": "~$117-126M",
       "rewardMechanic": "DePIN GPU cloud / 38% staked for rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-22",
       "isNew": false
     },
@@ -241,16 +230,16 @@
       "ticker": "GRASS",
       "marketCap": "~$174-223M",
       "rewardMechanic": "DePIN data layer / Node rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-22",
       "isNew": false
     },
     {
-      "name": "Printr",
+      "name": "Print Protocol",
       "ticker": "PRINT",
-      "marketCap": "~$52.8M",
-      "rewardMechanic": "Launchpad / Proof of Belief staking",
-      "confidence": 65,
+      "marketCap": "~$980K",
+      "rewardMechanic": "Reflection token / Auto SOL rewards",
+      "confidence": 75,
       "firstSeen": "2026-05-20",
       "isNew": false
     },
@@ -259,7 +248,7 @@
       "ticker": "DLOOP",
       "marketCap": "~$8K",
       "rewardMechanic": "Liquidity token / 6% tax split to holders",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-20",
       "isNew": false
     },
@@ -268,7 +257,7 @@
       "ticker": "SNMI",
       "marketCap": "~$1.1M",
       "rewardMechanic": "Solana L2 / 53% staking rewards",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-19",
       "isNew": false
     },
@@ -277,8 +266,350 @@
       "ticker": "VFX",
       "marketCap": "~$8.9M",
       "rewardMechanic": "Forex broker rebates / 67.7% APY staking",
-      "confidence": 65,
+      "confidence": 75,
       "firstSeen": "2026-05-19",
+      "isNew": false
+    },
+    {
+      "name": "Fragmetric",
+      "ticker": "FRAG",
+      "marketCap": "~$0.39M",
+      "rewardMechanic": "Liquid Restaking rewards",
+      "confidence": 75,
+      "firstSeen": "2026-05-11",
+      "isNew": false
+    },
+    {
+      "name": "Kyros",
+      "ticker": "KYROS",
+      "marketCap": "~$0.72M",
+      "rewardMechanic": "SOL (Re)staking / 12.54% APY",
+      "confidence": 75,
+      "firstSeen": "2026-05-11",
+      "isNew": false
+    },
+    {
+      "name": "Flash.Trade",
+      "ticker": "FAF",
+      "marketCap": "~$3.8M",
+      "rewardMechanic": "Trading platform / FAF staking",
+      "confidence": 75,
+      "firstSeen": "2026-05-11",
+      "isNew": false
+    },
+    {
+      "name": "Whales Market",
+      "ticker": "WHALES",
+      "marketCap": "~$0.35M",
+      "rewardMechanic": "OTC platform / xWHALES staking",
+      "confidence": 75,
+      "firstSeen": "2026-05-11",
+      "isNew": false
+    },
+    {
+      "name": "Adrena",
+      "ticker": "ADX",
+      "marketCap": "~$1.08M",
+      "rewardMechanic": "Perps DEX / ADX staking",
+      "confidence": 75,
+      "firstSeen": "2026-05-11",
+      "isNew": false
+    },
+    {
+      "name": "Solana ID",
+      "ticker": "SOLID",
+      "marketCap": "<$1M",
+      "rewardMechanic": "Ecosystem Perks / Airdrops",
+      "confidence": 75,
+      "firstSeen": "2026-05-07",
+      "isNew": false
+    },
+    {
+      "name": "DEPINfer",
+      "ticker": "DEPIN",
+      "marketCap": "<$1M",
+      "rewardMechanic": "GPU Infrastructure Utility / Rewards",
+      "confidence": 75,
+      "firstSeen": "2026-05-07",
+      "isNew": false
+    },
+    {
+      "name": "DefiTuna",
+      "ticker": "TUNA",
+      "marketCap": "~$3.5M",
+      "rewardMechanic": "AMM Protocol Revenue Sharing",
+      "confidence": 75,
+      "firstSeen": "2026-05-07",
+      "isNew": false
+    },
+    {
+      "name": "Revenue Rebate Service",
+      "ticker": "RRS",
+      "marketCap": "<$1M",
+      "rewardMechanic": "Automated SOL Rebates (VRF)",
+      "confidence": 75,
+      "firstSeen": "2026-05-07",
+      "isNew": false
+    },
+    {
+      "name": "PocketSol",
+      "ticker": "BALL",
+      "marketCap": "<$1M",
+      "rewardMechanic": "GameFi Reward Loop / SOL Fees",
+      "confidence": 75,
+      "firstSeen": "2026-05-07",
+      "isNew": false
+    },
+    {
+      "name": "Solayer",
+      "ticker": "LAYER",
+      "marketCap": "~$17.5M",
+      "rewardMechanic": "Restaking protocol / InfiniSVM",
+      "confidence": 75,
+      "firstSeen": "2026-05-05",
+      "isNew": false
+    },
+    {
+      "name": "Drift Protocol",
+      "ticker": "DRIFT",
+      "marketCap": "~$23.6M",
+      "rewardMechanic": "Perpetuals DEX / Revenue Pool / Fee sharing",
+      "confidence": 75,
+      "firstSeen": "2026-05-05",
+      "isNew": false
+    },
+    {
+      "name": "Tensor",
+      "ticker": "TNSR",
+      "marketCap": "~$13.2M",
+      "rewardMechanic": "NFT marketplace / 50% fee revenue sharing",
+      "confidence": 75,
+      "firstSeen": "2026-05-05",
+      "isNew": false
+    },
+    {
+      "name": "Access Protocol",
+      "ticker": "ACS",
+      "marketCap": "~$8.5M",
+      "rewardMechanic": "Content monetization / Lock tokens for access",
+      "confidence": 75,
+      "firstSeen": "2026-05-05",
+      "isNew": false
+    },
+    {
+      "name": "Helium Mobile",
+      "ticker": "MOBILE",
+      "marketCap": "~$10.9M",
+      "rewardMechanic": "DePIN 5G network / Hotspot rewards",
+      "confidence": 75,
+      "firstSeen": "2026-05-05",
+      "isNew": false
+    },
+    {
+      "name": "CARV",
+      "ticker": "CARV",
+      "marketCap": "~$33M",
+      "rewardMechanic": "IDL / Staking (veCARV) rewards",
+      "confidence": 75,
+      "firstSeen": "2026-05-01",
+      "isNew": false
+    },
+    {
+      "name": "Collector Crypt",
+      "ticker": "CARDS",
+      "marketCap": "~$33M",
+      "rewardMechanic": "RWA marketplace staking rewards",
+      "confidence": 75,
+      "firstSeen": "2026-05-01",
+      "isNew": false
+    },
+    {
+      "name": "Sallar",
+      "ticker": "ALL",
+      "marketCap": "<$1M",
+      "rewardMechanic": "DePIN mobile compute rewards",
+      "confidence": 75,
+      "firstSeen": "2026-04-10",
+      "isNew": false
+    },
+    {
+      "name": "dTelecom",
+      "ticker": "DTEL",
+      "marketCap": "<$1M",
+      "rewardMechanic": "dRTC network node rewards",
+      "confidence": 75,
+      "firstSeen": "2026-04-10",
+      "isNew": false
+    },
+    {
+      "name": "TIPS DEPIN",
+      "ticker": "TIPS",
+      "marketCap": "~$1M",
+      "rewardMechanic": "GPU compute sharing rewards",
+      "confidence": 75,
+      "firstSeen": "2026-04-10",
+      "isNew": false
+    },
+    {
+      "name": "DRIP",
+      "ticker": "DRIP",
+      "marketCap": "~$0.13M",
+      "rewardMechanic": "Transaction tax distribution rewards",
+      "confidence": 75,
+      "firstSeen": "2026-04-10",
+      "isNew": false
+    },
+    {
+      "name": "Solana Spaces",
+      "ticker": "STORE",
+      "marketCap": "~$3M",
+      "rewardMechanic": "Physical/Retail rewards",
+      "confidence": 75,
+      "firstSeen": "2026-04-02",
+      "isNew": false
+    },
+    {
+      "name": "Subway Market",
+      "ticker": "SUBWAY",
+      "marketCap": "~$5-10M",
+      "rewardMechanic": "Real estate revenue share",
+      "confidence": 75,
+      "firstSeen": "2026-04-02",
+      "isNew": false
+    },
+    {
+      "name": "Parcl",
+      "ticker": "PRCL",
+      "marketCap": "~$5-10M",
+      "rewardMechanic": "Real estate index exposure",
+      "confidence": 75,
+      "firstSeen": "2026-04-02",
+      "isNew": false
+    },
+    {
+      "name": "Solana Poker",
+      "ticker": "PLAY",
+      "marketCap": "<$1M",
+      "rewardMechanic": "Poker rakeback / Revenue share",
+      "confidence": 75,
+      "firstSeen": "2026-03-30",
+      "isNew": false
+    },
+    {
+      "name": "BonkEarn",
+      "ticker": "BERN",
+      "marketCap": "<$1M",
+      "rewardMechanic": "LP-backed rewards / Yield",
+      "confidence": 75,
+      "firstSeen": "2026-03-30",
+      "isNew": false
+    },
+    {
+      "name": "Untaxed",
+      "ticker": "UNTAXED",
+      "marketCap": "<$1M",
+      "rewardMechanic": "Fee-free trading / Holder perks",
+      "confidence": 75,
+      "firstSeen": "2026-03-30",
+      "isNew": false
+    },
+    {
+      "name": "Universal High Income",
+      "ticker": "INCOME",
+      "marketCap": "<$1M",
+      "rewardMechanic": "High-yield rewards protocol",
+      "confidence": 75,
+      "firstSeen": "2026-03-26",
+      "isNew": false
+    },
+    {
+      "name": "DoubleZero",
+      "ticker": "2Z",
+      "marketCap": "~$80M",
+      "rewardMechanic": "Infrastructure rewards (DePIN)",
+      "confidence": 75,
+      "firstSeen": "2026-03-25",
+      "isNew": false
+    },
+    {
+      "name": "Ant.FUN",
+      "ticker": "ANB",
+      "marketCap": "~$40M",
+      "rewardMechanic": "Trading platform rewards",
+      "confidence": 75,
+      "firstSeen": "2026-03-25",
+      "isNew": false
+    },
+    {
+      "name": "YZY MONEY",
+      "ticker": "YZY",
+      "marketCap": "~$99M",
+      "rewardMechanic": "Holder rewards mechanic",
+      "confidence": 75,
+      "firstSeen": "2026-03-25",
+      "isNew": false
+    },
+    {
+      "name": "Pythia",
+      "ticker": "PYTHIA",
+      "marketCap": "~$60M",
+      "rewardMechanic": "LP fee rewards / AI Biotech",
+      "confidence": 75,
+      "firstSeen": "2026-03-25",
+      "isNew": false
+    },
+    {
+      "name": "Alchemist AI",
+      "ticker": "ALCH",
+      "marketCap": "~$70M",
+      "rewardMechanic": "AI Yield/Staking",
+      "confidence": 75,
+      "firstSeen": "2026-03-21",
+      "isNew": false
+    },
+    {
+      "name": "Huma Finance",
+      "ticker": "HUMA",
+      "marketCap": "<$100M",
+      "rewardMechanic": "PayFi Yield",
+      "confidence": 75,
+      "firstSeen": "2026-03-21",
+      "isNew": false
+    },
+    {
+      "name": "Seeker",
+      "ticker": "SKR",
+      "marketCap": "<$100M",
+      "rewardMechanic": "TEEPin/DeWi",
+      "confidence": 75,
+      "firstSeen": "2026-03-21",
+      "isNew": false
+    },
+    {
+      "name": "Meteora",
+      "ticker": "MET",
+      "marketCap": "$60-90M",
+      "rewardMechanic": "Tracked reward mechanic",
+      "confidence": 62,
+      "firstSeen": "2026-03-20",
+      "isNew": false
+    },
+    {
+      "name": "Kamino",
+      "ticker": "KMNO",
+      "marketCap": "$80-110M",
+      "rewardMechanic": "Tracked reward mechanic",
+      "confidence": 62,
+      "firstSeen": "2026-03-20",
+      "isNew": false
+    },
+    {
+      "name": "SolCard",
+      "ticker": "SOLC",
+      "marketCap": "$5-15M",
+      "rewardMechanic": "Known baseline token",
+      "confidence": 55,
+      "firstSeen": "2026-03-20",
       "isNew": false
     }
   ]

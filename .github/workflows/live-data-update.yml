@@ -20,9 +20,13 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Build scout + fetch live data
+      - name: Fetch live data
         run: |
-          npm run build:data
+          npm run fetch:data
+
+      - name: Convert scout database to JSON
+        run: |
+          npm run convert:scout
 
       - name: Commit updated data
         run: |

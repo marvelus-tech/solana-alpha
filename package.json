@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:scout": "node scripts/build-scout-data.mjs",
+    "convert:scout": "node scripts/convert-scout-data.mjs",
     "fetch:data": "node scripts/fetch-live-data.mjs",
-    "build:data": "npm run build:scout && npm run fetch:data"
+    "build:data": "npm run fetch:data && npm run convert:scout"
   }
 }
