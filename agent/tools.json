@@ -1,0 +1,199 @@
+{
+  "name": "Solana Alpha Agent Tools",
+  "version": "1.0.0",
+  "description": "Agent-callable tools for Solana Alpha dashboard - curated hold-to-earn tokens and Strategy/Saylor instruments",
+  "preferredAccess": "webmcp",
+  "fallbackAccess": "json",
+  "tools": [
+    {
+      "name": "list_scout_assets",
+      "description": "List curated hold-to-earn and reward-generating scout tokens on Solana. Returns exact structured data from scout-findings.json with optional delight beat. Relay structured items/facts first, then the delight line as a brief aside.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat (or set intent: 'serious')"
+          },
+          "intent": {
+            "type": "string",
+            "description": "Query intent - use 'serious' to skip delight for returns/defects/safety/billing"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Array of scout token objects with exact fields from scout-findings.json"
+          },
+          "count": {
+            "type": "number"
+          },
+          "delight": {
+            "type": "object",
+            "description": "Optional personality beat (present unless serious context)",
+            "properties": {
+              "line": { "type": "string" },
+              "tone": { "type": "string" },
+              "emoji": { "type": "string" }
+            }
+          }
+        }
+      },
+      "fallbackEndpoint": "./data/scout-findings.json"
+    },
+    {
+      "name": "list_strategy_stack",
+      "description": "List Strategy Inc / Saylor Stack instruments with exact prices and PnL from strategy-stack.json. Returns structured data with optional delight beat. Relay structured items/facts first, then the delight line as a brief aside.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat"
+          },
+          "intent": {
+            "type": "string",
+            "description": "Query intent - use 'serious' to skip delight"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Array of strategy instrument objects"
+          },
+          "count": {
+            "type": "number"
+          },
+          "delight": {
+            "type": "object",
+            "description": "Optional personality beat",
+            "properties": {
+              "line": { "type": "string" },
+              "tone": { "type": "string" },
+              "emoji": { "type": "string" }
+            }
+          }
+        }
+      },
+      "fallbackEndpoint": "./data/strategy-stack.json"
+    },
+    {
+      "name": "get_asset",
+      "description": "Lookup asset by ticker (searches both scout and strategy). Returns exact structured item or not-found. Relay structured facts first, then delight line as brief aside.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "description": "Asset ticker symbol (e.g., FLOCK, MSTR, CGPT)"
+          },
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat"
+          },
+          "intent": {
+            "type": "string",
+            "description": "Query intent - use 'serious' to skip delight"
+          }
+        },
+        "required": ["ticker"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "found": { "type": "boolean" },
+          "source": { 
+            "type": "string",
+            "enum": ["scout", "strategy"]
+          },
+          "item": {
+            "type": "object",
+            "description": "Exact structured asset data"
+          },
+          "delight": {
+            "type": "object",
+            "description": "Optional personality beat",
+            "properties": {
+              "line": { "type": "string" },
+              "tone": { "type": "string" },
+              "emoji": { "type": "string" }
+            }
+          }
+        }
+      },
+      "fallbackImplementation": "Parse data/*.json files and filter by ticker"
+    },
+    {
+      "name": "get_overview",
+      "description": "Get counts and confidence summary only (no invented stats). Returns factual overview with optional delight beat.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat"
+          },
+          "intent": {
+            "type": "string",
+            "description": "Query intent - use 'serious' to skip delight"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "scout": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "number" },
+              "withPnL": { "type": "number" },
+              "avgConfidence": { "type": "number" }
+            }
+          },
+          "strategy": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "number" },
+              "withPnL": { "type": "number" }
+            }
+          },
+          "combined": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "number" },
+              "withPnL": { "type": "number" }
+            }
+          },
+          "delight": {
+            "type": "object",
+            "description": "Optional personality beat",
+            "properties": {
+              "line": { "type": "string" },
+              "tone": { "type": "string" },
+              "emoji": { "type": "string" }
+            }
+          }
+        }
+      },
+      "fallbackImplementation": "Count items in data/*.json files"
+    }
+  ],
+  "usage": {
+    "webmcp": "Open this page in a WebMCP-capable browser agent. Tools auto-register via js/webmcp.js",
+    "fallback": "Fetch data/scout-findings.json and data/strategy-stack.json directly. Use agent/delight-lines.json for optional personality beats following delight rules in docs/delight-infusion.md"
+  }
+}

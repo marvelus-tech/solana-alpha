@@ -438,6 +438,87 @@
       h1{font-size:1.8rem}
       .stat{padding:10px 12px}
     }
+    .agent-badge{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-row);
+      padding:10px 16px;
+      font-size:.82rem;
+      color:var(--muted);
+      box-shadow:var(--shadow-md);
+      transition:all var(--duration-fast) var(--ease-smooth);
+      z-index:100;
+    }
+    .agent-badge:hover{
+      box-shadow:var(--shadow-lift);
+      transform:translateY(-2px);
+      border-color:var(--accent);
+    }
+    .agent-badge a{
+      color:var(--accent);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .agent-badge a:hover{
+      text-decoration:underline;
+    }
+    .agent-demo{
+      margin-top:var(--spacing-lg);
+      padding:var(--spacing-md);
+      background:rgba(15,159,122,0.04);
+      border:1px solid rgba(15,159,122,0.2);
+      border-radius:var(--radius-row);
+    }
+    .agent-demo h3{
+      font-size:1rem;
+      font-weight:600;
+      margin:0 0 var(--spacing-sm);
+      color:var(--text);
+    }
+    .agent-demo-btn{
+      background:var(--accent);
+      color:white;
+      border:none;
+      border-radius:var(--radius-badge);
+      padding:10px 20px;
+      font-size:.92rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:all var(--duration-fast) var(--ease-smooth);
+    }
+    .agent-demo-btn:hover{
+      background:#0db88b;
+      transform:translateY(-1px);
+      box-shadow:var(--shadow-md);
+    }
+    .agent-demo-btn:disabled{
+      background:var(--muted);
+      cursor:not-allowed;
+      transform:none;
+    }
+    .agent-demo-result{
+      margin-top:var(--spacing-sm);
+      padding:var(--spacing-sm);
+      background:var(--surface);
+      border-radius:var(--radius-row);
+      font-size:.88rem;
+      max-height:300px;
+      overflow-y:auto;
+    }
+    .agent-demo-facts{
+      color:var(--text);
+      margin-bottom:var(--spacing-sm);
+    }
+    .agent-demo-delight{
+      color:var(--muted);
+      font-style:italic;
+      border-top:1px solid var(--border);
+      padding-top:var(--spacing-xs);
+      margin-top:var(--spacing-xs);
+    }
   </style>
 </head>
 <body>
@@ -466,8 +547,23 @@
         <div class="list" id="scoutFinds"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
       </article>
     </section>
+
+    <div class="agent-demo">
+      <h3>Ask as Agent</h3>
+      <p style="font-size:.88rem;color:var(--muted);margin:0 0 var(--spacing-sm)">
+        Try the agent-callable tools in your browser:
+      </p>
+      <button class="agent-demo-btn" id="demoBtn" onclick="runAgentDemo()">List Scout Assets</button>
+      <div id="demoResult" style="display:none" class="agent-demo-result"></div>
+    </div>
   </div>
 
+  <div class="agent-badge">
+    Agent-ready · <a href="./agent/README.md" target="_blank">WebMCP</a>
+  </div>
+
+  <script src="./js/delight.js"></script>
+  <script src="./js/webmcp.js"></script>
   <script>
     const money = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:n>=1?0:6}).format(Number(n||0));
     const compactMoney = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:2}).format(Number(n||0));
@@ -678,6 +774,61 @@
     }
 
     load();
+
+    // Agent demo function
+    async function runAgentDemo() {
+      const btn = document.getElementById('demoBtn');
+      const result = document.getElementById('demoResult');
+      
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+      result.style.display = 'none';
+      
+      try {
+        // Wait for data to load
+        await loadData();
+        
+        // Simulate calling list_scout_assets
+        const response = await fetch('./data/scout-findings.json?ts=' + Date.now(), { cache: 'no-store' });
+        const data = await response.json();
+        
+        // Pick first 3 items for demo
+        const items = data.tokens.slice(0, 3).map(t => ({
+          name: t.name,
+          ticker: t.ticker,
+          marketCap: t.marketCap,
+          rewardMechanic: t.rewardMechanic,
+          confidence: t.confidence,
+          currentPriceUsd: t.currentPriceUsd,
+          pnlPct: t.pnlPct
+        }));
+        
+        // Add delight beat
+        const delightBeat = pickDelightLine();
+        
+        // Format result
+        let html = '<div class="agent-demo-facts"><strong>Facts returned:</strong><ul style="margin:.5em 0;padding-left:1.5em">';
+        items.forEach(item => {
+          html += `<li><strong>${item.name}</strong> ($${item.ticker}): ${item.marketCap} · ${item.confidence}/100 confidence · $${item.currentPriceUsd.toFixed(6)}</li>`;
+        });
+        html += `</ul><em>Total: ${data.tokens.length} scout tokens</em></div>`;
+        
+        if (delightBeat) {
+          html += `<div class="agent-demo-delight">${delightBeat.emoji || ''} ${delightBeat.line}</div>`;
+        }
+        
+        result.innerHTML = html;
+        result.style.display = 'block';
+        
+        btn.textContent = 'Try Again';
+      } catch (err) {
+        result.innerHTML = '<div style="color:var(--neg)">Demo failed: ' + err.message + '</div>';
+        result.style.display = 'block';
+        btn.textContent = 'Retry';
+      } finally {
+        btn.disabled = false;
+      }
+    }
   </script>
 </body>
 </html>
