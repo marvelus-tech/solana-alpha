@@ -1,13 +1,20 @@
 {
   "name": "Solana Alpha Agent Tools",
-  "version": "1.0.0",
-  "description": "Agent-callable tools for Solana Alpha dashboard - curated hold-to-earn tokens and Strategy/Saylor instruments",
+  "version": "2.0.0",
+  "description": "Agent-callable tools for Solana Alpha dashboard - curated hold-to-earn tokens and Strategy/Saylor instruments. All tools return unified envelope: {ok, data, meta, delight}",
   "preferredAccess": "webmcp",
-  "fallbackAccess": "json",
+  "fallbackAccess": "remote-mcp",
+  "envelope": {
+    "version": "2.0",
+    "format": {
+      "success": "{ ok: true, data: {}, meta: { source, page_url, tool, as_of }, delight?: {} }",
+      "error": "{ ok: false, error: { code, message }, meta: { source, page_url, tool, as_of } }"
+    }
+  },
   "tools": [
     {
-      "name": "list_scout_assets",
-      "description": "List curated hold-to-earn and reward-generating scout tokens on Solana. Returns exact structured data from scout-findings.json with optional delight beat. Relay structured items/facts first, then the delight line as a brief aside.",
+      "name": "describe_site",
+      "description": "What Solana Alpha is, sections, primary jobs. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
       "readOnly": true,
       "consequential": false,
       "inputSchema": {
@@ -15,40 +22,64 @@
         "properties": {
           "serious": {
             "type": "boolean",
-            "description": "Set true to skip delight beat (or set intent: 'serious')"
-          },
-          "intent": {
-            "type": "string",
-            "description": "Query intent - use 'serious' to skip delight for returns/defects/safety/billing"
+            "description": "Set true to skip delight beat"
           }
         }
       },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "description": "Array of scout token objects with exact fields from scout-findings.json"
-          },
-          "count": {
-            "type": "number"
-          },
-          "delight": {
-            "type": "object",
-            "description": "Optional personality beat (present unless serious context)",
-            "properties": {
-              "line": { "type": "string" },
-              "tone": { "type": "string" },
-              "emoji": { "type": "string" }
-            }
-          }
-        }
-      },
-      "fallbackEndpoint": "./data/scout-findings.json"
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
+          "name": "string",
+          "tagline": "string",
+          "sections": "array",
+          "user_jobs": "array",
+          "mutating_operations": "string",
+          "data_refresh": "string"
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "describe_site",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional"
+      }
     },
     {
-      "name": "list_strategy_stack",
-      "description": "List Strategy Inc / Saylor Stack instruments with exact prices and PnL from strategy-stack.json. Returns structured data with optional delight beat. Relay structured items/facts first, then the delight line as a brief aside.",
+      "name": "describe_page",
+      "description": "Current page title/purpose/canonical URL. WebMCP can use live DOM; remote returns static site description. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat"
+          }
+        }
+      },
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
+          "title": "string",
+          "canonical_url": "string",
+          "purpose": "string",
+          "page_type": "string",
+          "last_updated": "ISO-8601"
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "describe_page",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional"
+      }
+    },
+    {
+      "name": "list_scout_assets",
+      "description": "List curated hold-to-earn and reward-generating scout tokens on Solana. Returns exact structured data from scout-findings.json. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
       "readOnly": true,
       "consequential": false,
       "inputSchema": {
@@ -64,32 +95,59 @@
           }
         }
       },
-      "outputSchema": {
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
+          "tokens": "array of objects with: name, ticker, marketCap, rewardMechanic, confidence, addedAt, entryPriceUsd, currentPriceUsd, pnlPct, priceUpdatedAt, tokenAddress, dexUrl",
+          "count": "number"
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "list_scout_assets",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional (skipped if serious=true or intent='serious')"
+      },
+      "fallbackEndpoint": "./data/scout-findings.json"
+    },
+    {
+      "name": "list_strategy_stack",
+      "description": "List Strategy Inc / Saylor Stack instruments with exact prices and PnL from strategy-stack.json. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
+      "readOnly": true,
+      "consequential": false,
+      "inputSchema": {
         "type": "object",
         "properties": {
-          "items": {
-            "type": "array",
-            "description": "Array of strategy instrument objects"
+          "serious": {
+            "type": "boolean",
+            "description": "Set true to skip delight beat"
           },
-          "count": {
-            "type": "number"
-          },
-          "delight": {
-            "type": "object",
-            "description": "Optional personality beat",
-            "properties": {
-              "line": { "type": "string" },
-              "tone": { "type": "string" },
-              "emoji": { "type": "string" }
-            }
+          "intent": {
+            "type": "string",
+            "description": "Query intent - use 'serious' to skip delight"
           }
         }
+      },
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
+          "instruments": "array of objects with: ticker, name, type, category, description, currentPriceUsd, entryPriceUsd, pnlPct, priceSource, priceUpdatedAt, addedAt, dexUrl, infoUrl, tokenAddress",
+          "count": "number"
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "list_strategy_stack",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional (skipped if serious=true or intent='serious')"
       },
       "fallbackEndpoint": "./data/strategy-stack.json"
     },
     {
       "name": "get_asset",
-      "description": "Lookup asset by ticker (searches both scout and strategy). Returns exact structured item or not-found. Relay structured facts first, then delight line as brief aside.",
+      "description": "Lookup asset by ticker (searches both scout and strategy). Returns exact structured item or not-found. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
       "readOnly": true,
       "consequential": false,
       "inputSchema": {
@@ -110,34 +168,26 @@
         },
         "required": ["ticker"]
       },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "found": { "type": "boolean" },
-          "source": { 
-            "type": "string",
-            "enum": ["scout", "strategy"]
-          },
-          "item": {
-            "type": "object",
-            "description": "Exact structured asset data"
-          },
-          "delight": {
-            "type": "object",
-            "description": "Optional personality beat",
-            "properties": {
-              "line": { "type": "string" },
-              "tone": { "type": "string" },
-              "emoji": { "type": "string" }
-            }
-          }
-        }
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
+          "found": "boolean",
+          "source": "scout | strategy",
+          "asset": "object with exact structured asset data"
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "get_asset",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional (skipped if serious=true, intent='serious', or not found)"
       },
       "fallbackImplementation": "Parse data/*.json files and filter by ticker"
     },
     {
       "name": "get_overview",
-      "description": "Get counts and confidence summary only (no invented stats). Returns factual overview with optional delight beat.",
+      "description": "Get counts and confidence summary only (no invented stats). Returns factual overview. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.",
       "readOnly": true,
       "consequential": false,
       "inputSchema": {
@@ -153,47 +203,41 @@
           }
         }
       },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
+      "outputEnvelope": {
+        "ok": true,
+        "data": {
           "scout": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "number" },
-              "withPnL": { "type": "number" },
-              "avgConfidence": { "type": "number" }
-            }
+            "total": "number",
+            "withPnL": "number",
+            "avgConfidence": "number"
           },
           "strategy": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "number" },
-              "withPnL": { "type": "number" }
-            }
+            "total": "number",
+            "withPnL": "number"
           },
           "combined": {
-            "type": "object",
-            "properties": {
-              "total": { "type": "number" },
-              "withPnL": { "type": "number" }
-            }
-          },
-          "delight": {
-            "type": "object",
-            "description": "Optional personality beat",
-            "properties": {
-              "line": { "type": "string" },
-              "tone": { "type": "string" },
-              "emoji": { "type": "string" }
-            }
+            "total": "number",
+            "withPnL": "number"
           }
-        }
+        },
+        "meta": {
+          "source": "webmcp | remote-mcp",
+          "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+          "tool": "get_overview",
+          "as_of": "ISO-8601"
+        },
+        "delight": "optional (skipped if serious=true or intent='serious')"
       },
       "fallbackImplementation": "Count items in data/*.json files"
     }
   ],
   "usage": {
-    "webmcp": "Open this page in a WebMCP-capable browser agent. Tools auto-register via js/webmcp.js",
-    "fallback": "Fetch data/scout-findings.json and data/strategy-stack.json directly. Use agent/delight-lines.json for optional personality beats following delight rules in docs/delight-infusion.md"
+    "webmcp": "Open https://marvelus-tech.github.io/solana-alpha/ in a WebMCP-capable browser agent. Tools auto-register via js/webmcp.js",
+    "remote_mcp": "Connect to remote MCP endpoint at https://solana-alpha-mcp.<account>.workers.dev/mcp (Streamable HTTP JSON-RPC)",
+    "fallback": "Fetch data/scout-findings.json and data/strategy-stack.json directly"
+  },
+  "delight": {
+    "bank": "agent/delight-lines.json (18 Solana Alpha voice lines)",
+    "rules": "Skip for errors, serious intent, consequential ops. One rotating line, tone: wry|warm|curious|deadpan|quiet"
   }
 }

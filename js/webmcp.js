@@ -1,6 +1,7 @@
 /**
  * WebMCP Tool Registration for Solana Alpha
- * Registers agent-callable tools using document.modelContext or navigator.modelContext
+ * Uses shared envelope module for consistent response format
+ * Registers 6 read-only tools with document.modelContext or navigator.modelContext
  */
 
 let scoutData = null;
@@ -53,11 +54,104 @@ async function registerTools() {
     return false;
   }
   
+  if (!window.EnvelopeModule) {
+    console.error('Envelope module not loaded');
+    return false;
+  }
+
+  const { wrapWithEnvelope } = window.EnvelopeModule;
+  
   try {
-    // Tool 1: list_scout_assets
+    // Tool 1: describe_site
+    modelContext.registerTool({
+      name: 'describe_site',
+      description: 'What Solana Alpha is, sections, primary jobs. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
+      annotations: {
+        readOnlyHint: true,
+        consequentialHint: false
+      },
+      inputSchema: {
+        type: 'object',
+        properties: {
+          serious: {
+            type: 'boolean',
+            description: 'Set true to skip delight beat'
+          }
+        }
+      },
+      handler: (input) => {
+        const data = {
+          name: 'Solana Alpha',
+          tagline: 'Tracking reward-generating assets and wealth-building instruments on Solana',
+          sections: [
+            {
+              name: 'Scout Finds',
+              description: 'Curated hold-to-earn and reward-generating tokens',
+              count: scoutData?.tokens?.length || 0
+            },
+            {
+              name: 'Strategy / Saylor Stack',
+              description: 'Strategy Inc (MSTR) common + preferreds + tokenized forms',
+              count: strategyData?.instruments?.length || 0
+            }
+          ],
+          user_jobs: [
+            'Browse scout list - scan curated hold-to-earn tokens',
+            'Browse strategy stack - view MSTR + preferreds + tokenized forms',
+            'Lookup one asset by ticker - get entry/now/PnL for specific instrument',
+            'See entry/now/PnL - track performance since addition',
+            'Share with agents - send dashboard URL to AI assistants'
+          ],
+          mutating_operations: 'None - read-only dashboard',
+          data_refresh: 'Hourly via GitHub Action'
+        };
+        
+        return wrapWithEnvelope(data, {
+          source: 'webmcp',
+          tool: 'describe_site',
+          ...input
+        });
+      }
+    });
+
+    // Tool 2: describe_page
+    modelContext.registerTool({
+      name: 'describe_page',
+      description: 'Current page title/purpose/canonical URL. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
+      annotations: {
+        readOnlyHint: true,
+        consequentialHint: false
+      },
+      inputSchema: {
+        type: 'object',
+        properties: {
+          serious: {
+            type: 'boolean',
+            description: 'Set true to skip delight beat'
+          }
+        }
+      },
+      handler: (input) => {
+        const data = {
+          title: document.title || 'Solana Alpha — Live',
+          canonical_url: 'https://marvelus-tech.github.io/solana-alpha/',
+          purpose: 'Live dashboard showing curated hold-to-earn Solana tokens and Strategy/Saylor Stack instruments with entry/current prices and PnL tracking',
+          page_type: 'Single-page dashboard',
+          last_updated: scoutData?.enrichedAt || strategyData?.enrichedAt || new Date().toISOString()
+        };
+        
+        return wrapWithEnvelope(data, {
+          source: 'webmcp',
+          tool: 'describe_page',
+          ...input
+        });
+      }
+    });
+
+    // Tool 3: list_scout_assets
     modelContext.registerTool({
       name: 'list_scout_assets',
-      description: 'List curated hold-to-earn and reward-generating scout tokens on Solana',
+      description: 'List curated hold-to-earn and reward-generating scout tokens on Solana with exact fields from scout-findings.json. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
       annotations: {
         readOnlyHint: true,
         consequentialHint: false
@@ -71,17 +165,21 @@ async function registerTools() {
           },
           intent: {
             type: 'string',
-            description: 'Query intent (e.g., "serious" to skip delight)'
+            description: 'Query intent - use "serious" to skip delight'
           }
         }
       },
       handler: (input) => {
         if (!scoutData || !scoutData.tokens) {
-          return { items: [], count: 0 };
+          return wrapWithEnvelope({ error: { code: 'NO_DATA', message: 'Scout data not loaded' } }, {
+            source: 'webmcp',
+            tool: 'list_scout_assets',
+            skipDelight: true
+          });
         }
         
-        const result = {
-          items: scoutData.tokens.map(t => ({
+        const data = {
+          tokens: scoutData.tokens.map(t => ({
             name: t.name,
             ticker: t.ticker,
             marketCap: t.marketCap,
@@ -91,22 +189,25 @@ async function registerTools() {
             entryPriceUsd: t.entryPriceUsd,
             currentPriceUsd: t.currentPriceUsd,
             pnlPct: t.pnlPct,
+            priceUpdatedAt: t.priceUpdatedAt,
             tokenAddress: t.tokenAddress,
-            links: {
-              dexUrl: t.dexUrl
-            }
+            dexUrl: t.dexUrl
           })),
           count: scoutData.tokens.length
         };
         
-        return withDelight(result, input);
+        return wrapWithEnvelope(data, {
+          source: 'webmcp',
+          tool: 'list_scout_assets',
+          ...input
+        });
       }
     });
-    
-    // Tool 2: list_strategy_stack
+
+    // Tool 4: list_strategy_stack
     modelContext.registerTool({
       name: 'list_strategy_stack',
-      description: 'List Strategy Inc / Saylor Stack instruments with prices and PnL',
+      description: 'List Strategy Inc / Saylor Stack instruments with exact fields from strategy-stack.json. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
       annotations: {
         readOnlyHint: true,
         consequentialHint: false
@@ -120,42 +221,51 @@ async function registerTools() {
           },
           intent: {
             type: 'string',
-            description: 'Query intent (e.g., "serious" to skip delight)'
+            description: 'Query intent - use "serious" to skip delight'
           }
         }
       },
       handler: (input) => {
         if (!strategyData || !strategyData.instruments) {
-          return { items: [], count: 0 };
+          return wrapWithEnvelope({ error: { code: 'NO_DATA', message: 'Strategy data not loaded' } }, {
+            source: 'webmcp',
+            tool: 'list_strategy_stack',
+            skipDelight: true
+          });
         }
         
-        const result = {
-          items: strategyData.instruments.map(inst => ({
+        const data = {
+          instruments: strategyData.instruments.map(inst => ({
             ticker: inst.ticker,
             name: inst.name,
             type: inst.type,
+            category: inst.category,
             description: inst.description,
             currentPriceUsd: inst.currentPriceUsd,
             entryPriceUsd: inst.entryPriceUsd,
             pnlPct: inst.pnlPct,
             priceSource: inst.priceSource,
+            priceUpdatedAt: inst.priceUpdatedAt,
             addedAt: inst.addedAt,
-            links: {
-              dexUrl: inst.dexUrl,
-              infoUrl: inst.infoUrl
-            }
+            dexUrl: inst.dexUrl,
+            infoUrl: inst.infoUrl,
+            tokenAddress: inst.tokenAddress
           })),
           count: strategyData.instruments.length
         };
         
-        return withDelight(result, input);
+        return wrapWithEnvelope(data, {
+          source: 'webmcp',
+          tool: 'list_strategy_stack',
+          ...input
+        });
       }
     });
-    
-    // Tool 3: get_asset
+
+    // Tool 5: get_asset
     modelContext.registerTool({
       name: 'get_asset',
-      description: 'Lookup asset by ticker (searches both scout and strategy)',
+      description: 'Lookup asset by ticker (searches both scout and strategy). Returns exact structured item or not-found. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
       annotations: {
         readOnlyHint: true,
         consequentialHint: false
@@ -173,7 +283,7 @@ async function registerTools() {
           },
           intent: {
             type: 'string',
-            description: 'Query intent (e.g., "serious" to skip delight)'
+            description: 'Query intent - use "serious" to skip delight'
           }
         },
         required: ['ticker']
@@ -181,7 +291,11 @@ async function registerTools() {
       handler: (input) => {
         const ticker = input.ticker?.toUpperCase();
         if (!ticker) {
-          return { error: 'Ticker required' };
+          return wrapWithEnvelope({ error: { code: 'MISSING_TICKER', message: 'Ticker parameter required' } }, {
+            source: 'webmcp',
+            tool: 'get_asset',
+            skipDelight: true
+          });
         }
         
         // Search scout tokens
@@ -190,10 +304,10 @@ async function registerTools() {
             t.ticker?.toUpperCase() === ticker
           );
           if (scoutMatch) {
-            const result = {
+            const data = {
               found: true,
               source: 'scout',
-              item: {
+              asset: {
                 name: scoutMatch.name,
                 ticker: scoutMatch.ticker,
                 marketCap: scoutMatch.marketCap,
@@ -203,13 +317,17 @@ async function registerTools() {
                 entryPriceUsd: scoutMatch.entryPriceUsd,
                 currentPriceUsd: scoutMatch.currentPriceUsd,
                 pnlPct: scoutMatch.pnlPct,
+                priceUpdatedAt: scoutMatch.priceUpdatedAt,
                 tokenAddress: scoutMatch.tokenAddress,
-                links: {
-                  dexUrl: scoutMatch.dexUrl
-                }
+                dexUrl: scoutMatch.dexUrl
               }
             };
-            return withDelight(result, { ...input, query: ticker });
+            return wrapWithEnvelope(data, {
+              source: 'webmcp',
+              tool: 'get_asset',
+              query: ticker,
+              ...input
+            });
           }
         }
         
@@ -219,37 +337,47 @@ async function registerTools() {
             inst.ticker?.toUpperCase() === ticker
           );
           if (strategyMatch) {
-            const result = {
+            const data = {
               found: true,
               source: 'strategy',
-              item: {
+              asset: {
                 ticker: strategyMatch.ticker,
                 name: strategyMatch.name,
                 type: strategyMatch.type,
+                category: strategyMatch.category,
                 description: strategyMatch.description,
                 currentPriceUsd: strategyMatch.currentPriceUsd,
                 entryPriceUsd: strategyMatch.entryPriceUsd,
                 pnlPct: strategyMatch.pnlPct,
                 priceSource: strategyMatch.priceSource,
+                priceUpdatedAt: strategyMatch.priceUpdatedAt,
                 addedAt: strategyMatch.addedAt,
-                links: {
-                  dexUrl: strategyMatch.dexUrl,
-                  infoUrl: strategyMatch.infoUrl
-                }
+                dexUrl: strategyMatch.dexUrl,
+                infoUrl: strategyMatch.infoUrl,
+                tokenAddress: strategyMatch.tokenAddress
               }
             };
-            return withDelight(result, { ...input, query: ticker });
+            return wrapWithEnvelope(data, {
+              source: 'webmcp',
+              tool: 'get_asset',
+              query: ticker,
+              ...input
+            });
           }
         }
         
-        return { found: false, ticker };
+        return wrapWithEnvelope({ error: { code: 'NOT_FOUND', message: `Ticker ${ticker} not found in scout or strategy data` } }, {
+          source: 'webmcp',
+          tool: 'get_asset',
+          skipDelight: true
+        });
       }
     });
-    
-    // Tool 4: get_overview
+
+    // Tool 6: get_overview
     modelContext.registerTool({
       name: 'get_overview',
-      description: 'Get counts and confidence summary (no invented stats)',
+      description: 'Get counts and confidence summary only (no invented stats). Returns factual overview. Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.',
       annotations: {
         readOnlyHint: true,
         consequentialHint: false
@@ -263,7 +391,7 @@ async function registerTools() {
           },
           intent: {
             type: 'string',
-            description: 'Query intent (e.g., "serious" to skip delight)'
+            description: 'Query intent - use "serious" to skip delight'
           }
         }
       },
@@ -286,7 +414,7 @@ async function registerTools() {
             )
           : 0;
         
-        const result = {
+        const data = {
           scout: {
             total: scoutCount,
             withPnL: scoutWithPnL,
@@ -302,11 +430,15 @@ async function registerTools() {
           }
         };
         
-        return withDelight(result, input);
+        return wrapWithEnvelope(data, {
+          source: 'webmcp',
+          tool: 'get_overview',
+          ...input
+        });
       }
     });
     
-    console.log('WebMCP tools registered successfully');
+    console.log('WebMCP tools registered successfully (6 tools)');
     return true;
     
   } catch (err) {

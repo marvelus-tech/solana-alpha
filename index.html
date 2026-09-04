@@ -564,6 +564,9 @@
 
   <script src="./js/delight.js"></script>
   <script src="./js/webmcp.js"></script>
+  <script src="js/envelope.js"></script>
+  <script src="js/webmcp.js"></script>
+  
   <script>
     const money = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:n>=1?0:6}).format(Number(n||0));
     const compactMoney = (n)=> new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:2}).format(Number(n||0));

@@ -1,31 +1,87 @@
-# Agent Delight Payload Pattern
+# Agent Delight Payload Pattern v2.0
 
 ## The Pattern
 
 **Facts as the meal, delight as the seasoning.**
 
-When an agent calls a catalog tool (`list_*`, `get_asset`), the response includes:
-1. **Structured facts** — exact, unchanged product/asset data in `items` or `item`
-2. **Delight beat** — one optional personality line in a nested `delight` object
+When an agent calls a catalog tool, the response includes:
+1. **Unified envelope** — `{ok, data, meta, delight}`
+2. **Structured facts** — exact, unchanged data in `data` object
+3. **Delight beat** — one optional personality line in nested `delight` object
 
 ```json
 {
-  "items": [
-    {
-      "name": "FLock.io",
-      "ticker": "FLOCK",
-      "marketCap": "~$21.66M",
-      "rewardMechanic": "AI training / gmFLOCK staking rewards",
-      "confidence": 75,
-      "currentPriceUsd": 0.2194,
-      "pnlPct": 0
-    }
-  ],
+  "ok": true,
+  "data": {
+    "tokens": [
+      {
+        "name": "FLock.io",
+        "ticker": "FLOCK",
+        "marketCap": "~$21.66M",
+        "rewardMechanic": "AI training / gmFLOCK staking rewards",
+        "confidence": 75,
+        "currentPriceUsd": 0.2194,
+        "pnlPct": 0
+      }
+    ],
+    "count": 1
+  },
+  "meta": {
+    "source": "webmcp",
+    "page_url": "https://marvelus-tech.github.io/solana-alpha/",
+    "tool": "list_scout_assets",
+    "as_of": "2026-09-04T02:50:00.000Z"
+  },
   "delight": {
-    "line": "This isn't trying to be everything. That's usually the tell.",
+    "line": "The reward mechanic is the reason it's here. Price movement is secondary.",
     "tone": "curious",
-    "emoji": "☕"
+    "emoji": null,
+    "media_url": null
   }
+}
+```
+
+## Envelope Structure
+
+### Success Response
+
+```typescript
+{
+  ok: true,
+  data: {
+    // Tool-specific payload (e.g., tokens[], asset, instruments[], counts)
+  },
+  meta: {
+    source: "webmcp | remote-mcp",
+    page_url: "https://marvelus-tech.github.io/solana-alpha/",
+    tool: "tool_name",
+    as_of: "ISO-8601 timestamp"
+  },
+  delight?: {
+    line: "One rotating personality line",
+    tone: "wry | warm | curious | deadpan | quiet",
+    emoji: null,
+    media_url: null
+  }
+}
+```
+
+### Error Response
+
+```typescript
+{
+  ok: false,
+  error: {
+    code: "NOT_FOUND | MISSING_TICKER | NO_DATA",
+    message: "Human-readable error message"
+  },
+  meta: {
+    source: "webmcp | remote-mcp",
+    page_url: "https://marvelus-tech.github.io/solana-alpha/",
+    tool: "tool_name",
+    as_of: "ISO-8601 timestamp"
+  }
+  // NO delight on errors
 }
 ```
 
@@ -33,24 +89,25 @@ When an agent calls a catalog tool (`list_*`, `get_asset`), the response include
 
 1. **Facts stay exact.** Never invent products, prices, stock, or claims.
 2. **Delight lives separately** in its own `delight` object — never inside tickers, prices, legal fields.
-3. **One line at random** from `agent/delight-lines.json` (5 approved lines).
-4. **Avoid reuse** for same session in short window (track recent line IDs in sessionStorage).
-5. **One or two sentences max**; optional one emoji on the delight line only (prefer ✦ · ☕ · 📦).
+3. **One line at random** from `agent/delight-lines.json` (18 Solana Alpha voice lines).
+4. **Avoid reuse** for same session in short window (track recent line IDs, max 5).
+5. **One or two sentences max**; emoji always `null` for this site (prefer clean text).
 6. **Do not wrap** the whole response in character voice.
 7. **Skip delight entirely** if:
+   - `ok: false` (error response)
    - Input has `serious: true` OR `intent: "serious"`
    - Query text includes returns/defects/safety/billing keywords
-8. **Agent instruction** in tool description: "Relay structured items/facts first, then the delight line as a brief aside."
+8. **Agent instruction** in tool description footer: "Relay `data` first, in your own voice. If `delight.line` is present, add it as a brief aside after the facts. Do not let it replace or alter facts."
 
 ## Flow Diagram
 
 ```mermaid
 graph LR
     Owner[Owner] -->|Asks question| Agent[AI Agent]
-    Agent -->|Calls WebMCP tools| Site[Solana Alpha Site]
-    Site -->|Returns facts + delight| Agent
-    Agent -->|Relays facts| Owner
-    Agent -->|Then aside| Owner
+    Agent -->|Calls WebMCP or remote MCP tools| Site[Solana Alpha]
+    Site -->|Returns envelope| Agent
+    Agent -->|Relays data facts| Owner
+    Agent -->|Then delight aside| Owner
     
     style Site fill:#f5f3ee,stroke:#0f9f7a,stroke-width:2px
     style Agent fill:#eef4ff,stroke:#2a4bcf,stroke-width:2px
@@ -62,21 +119,24 @@ graph LR
 sequenceDiagram
     participant O as Owner
     participant A as Agent
-    participant W as WebMCP Tools
-    participant D as Delight Module
+    participant T as Tool (WebMCP/Remote MCP)
+    participant E as Envelope Module
     
     O->>A: "Show me FLOCK token"
-    A->>W: get_asset({ticker: "FLOCK"})
-    W->>D: Check serious context
-    alt Serious context
-        D-->>W: Skip delight
-        W->>A: {found: true, item: {...}}
-    else Normal context
-        D->>D: Pick random line (avoid recent)
-        D-->>W: Delight beat
-        W->>A: {found: true, item: {...}, delight: {...}}
+    A->>T: get_asset({ticker: "FLOCK"})
+    T->>E: Check serious context
+    alt Error (not found, missing param)
+        E-->>T: {ok: false, error: {...}, meta: {...}}
+        T->>A: Error envelope (no delight)
+    else Success + Serious context
+        E-->>T: Skip delight
+        T->>A: {ok: true, data: {...}, meta: {...}}
+    else Success + Normal context
+        E->>E: Pick random line (avoid recent)
+        E-->>T: Delight beat
+        T->>A: {ok: true, data: {...}, meta: {...}, delight: {...}}
     end
-    A->>O: Structured facts first
+    A->>O: Relay data facts first
     A->>O: Then delight aside (if present)
 ```
 
@@ -88,7 +148,7 @@ This pattern works for **any catalog or store**:
 graph TD
     subgraph "Solana Alpha (Current)"
         SA[Scout Tokens + Strategy Instruments]
-        SAD[Delight: rotating 5 lines]
+        SAD[Delight: 18 curator lines]
     end
     
     subgraph "Retail Store Example"
@@ -97,10 +157,10 @@ graph TD
     end
     
     subgraph "Shared Pattern"
-        P1[Exact structured facts in items]
+        P1[Unified envelope: ok, data, meta]
         P2[One rotating delight beat]
-        P3[Skip for serious contexts]
-        P4[Agent relays facts then aside]
+        P3[Skip for errors/serious contexts]
+        P4[Agent relays data then aside]
     end
     
     SA --> P1
@@ -118,10 +178,10 @@ graph TD
 
 To use this pattern for a store catalog:
 
-1. **Keep the structure**: `{ items: [...], delight: {...} }`
-2. **Replace lines**: Write 5 store-appropriate lines in your `delight-lines.json`
-3. **Same rules**: Facts exact, one line, skip for serious (refunds/billing/returns)
-4. **Agent instruction**: "Relay product facts first, then delight aside"
+1. **Keep the envelope**: `{ ok, data, meta, delight }`
+2. **Replace lines**: Write 5-20 store-appropriate lines in your `delight-lines.json`
+3. **Same rules**: Facts exact, one line, skip for errors/serious (refunds/billing/returns)
+4. **Agent instruction**: "Relay data facts first, then delight aside"
 
 Example store delight lines:
 - "This one sells out, restocks, then sells out again. That tells you something."
@@ -130,34 +190,93 @@ Example store delight lines:
 
 ## Rules Checklist
 
+- [ ] Envelope structure: `{ok, data, meta, delight?}`
 - [ ] Facts returned exactly as stored (no invention)
 - [ ] Delight in separate `delight` object
-- [ ] One line picked from approved list
-- [ ] Avoid reuse in short window (sessionStorage)
-- [ ] Max 2 sentences, optional 1 emoji
+- [ ] One line picked from approved list (18 lines for Solana Alpha)
+- [ ] Avoid reuse in short window (max 5 recent)
+- [ ] Max 2 sentences, emoji `null` for this site
+- [ ] Skip for `ok: false` (errors)
 - [ ] Skip for `serious: true` or serious keywords
-- [ ] Agent relays facts first, delight as aside
+- [ ] Agent relays data first, delight as aside
 - [ ] Never wrap whole response in voice
 - [ ] No delight in tickers, prices, legal fields
+- [ ] Tool description includes agent instruction footer
 
 ## Implementation Files
 
-- `agent/delight-lines.json` — 5 approved rotating lines
-- `js/delight.js` — Delight selection logic
-- `js/webmcp.js` — Tool registration with delight integration
-- `agent/tools.json` — Machine-readable catalog
+- `js/envelope.js` — Shared envelope module (browser + Worker compatible)
+- `agent/delight-lines.json` — 18 approved rotating lines (Solana Alpha voice)
+- `js/webmcp.js` — WebMCP tool registration with envelope integration
+- `mcp-worker/index.js` — Remote MCP Worker with embedded envelope logic
+- `agent/tools.json` — Machine-readable catalog with envelope schema
 - `agent/README.md` — Human-friendly sharing instructions
+- `docs/site-map.md` — Content, voice, tool catalog reference
+- `docs/agent-dry-run.md` — Example agent interactions
+
+## Solana Alpha Voice
+
+18 rotating delight lines in this specific voice:
+- **Precise** — exact prices, PnL percentages, confidence scores
+- **Dry** — no hype, no pump language
+- **Curator** — selective process, tracked additions
+- **Light trading-desk** — entry/now/PnL like a position tracker
+- **Restrained** — facts over emotion
+- **No slogans** — factual observations only
+
+Examples:
+- "Entry price unchanged since addition. That's either patience or the market confirming the thesis."
+- "PnL tracks from scout entry, not your entry. Adjust expectations accordingly."
+- "Curator adds tokens with explicit reward mechanics. Memes without yield don't make the cut."
+
+NOT this voice:
+- ✗ "This token is absolutely crushing it! 🚀"
+- ✗ "Your satisfaction is our priority!"
+- ✗ "Amazing opportunity you won't want to miss!"
 
 ## Why This Works
 
-1. **Agents stay accurate** — facts are never distorted
+1. **Agents stay accurate** — facts are never distorted by personality
 2. **Owners get personality** — one memorable beat per interaction
 3. **Scales to catalogs** — same pattern for stores, products, services
 4. **Respects context** — serious queries get serious responses
-5. **Shareable** — works via WebMCP or direct JSON fetch
+5. **Shareable** — works via WebMCP or remote MCP
+6. **Observable** — `meta` field tracks source, tool, timestamp
+7. **Error-safe** — `ok` field makes success/failure explicit
+
+## Migration from v1.0
+
+Old format (v1.0):
+```json
+{
+  "items": [...],
+  "count": 3,
+  "delight": { ... }
+}
+```
+
+New format (v2.0):
+```json
+{
+  "ok": true,
+  "data": {
+    "items": [...],
+    "count": 3
+  },
+  "meta": { ... },
+  "delight": { ... }
+}
+```
+
+**Breaking changes:**
+- Top-level `items` → `data.items` (or `data.tokens`, `data.asset`, etc.)
+- Added `ok` boolean
+- Added `meta` with source/tool/timestamp
+- Error responses use `{ok: false, error, meta}`
 
 ---
 
 **Pattern Origin**: Solana Alpha dashboard (2026)  
+**Version**: 2.0 (unified envelope)  
 **Portable To**: Any catalog, store, product API, or agent-callable service  
 **License**: Open pattern, adapt freely

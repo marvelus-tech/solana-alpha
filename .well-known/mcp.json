@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "solana-alpha": {
+      "url": "https://solana-alpha-mcp.YOURACCOUNT.workers.dev/mcp",
+      "transport": "http-sse",
+      "description": "Remote MCP server for Solana Alpha dashboard - curated hold-to-earn tokens and Strategy/Saylor instruments",
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "tools": [
+        "describe_site",
+        "describe_page",
+        "list_scout_assets",
+        "list_strategy_stack",
+        "get_asset",
+        "get_overview"
+      ]
+    }
+  },
+  "notes": [
+    "Update the 'url' field with your actual Cloudflare Worker URL after deployment",
+    "Deploy Worker from mcp-worker/ directory: npx wrangler deploy",
+    "WebMCP auto-registers when opening https://marvelus-tech.github.io/solana-alpha/ in browser agent"
+  ]
+}
