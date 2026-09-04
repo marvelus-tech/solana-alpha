@@ -1,47 +1,44 @@
-# Solana Alpha — Live Data Pipeline
+# Solana Alpha — Unique Reward-Generating Assets
 
-This dashboard now renders **real Solana market data** from API-generated JSON (no hardcoded fake stats).
+This dashboard showcases **unique reward-generating assets** with the greatest wealth-building potential, tracked by Scout + Strategy with live PnL.
 
 ## What the pipeline does
 
-- Pulls live token universe from DexScreener:
-  - `token-profiles/latest/v1`
-  - `token-boosts/top/v1`
-  - `token-boosts/latest/v1`
-  - `tokens/v1/solana/{tokenAddresses}`
-- Builds dashboard datasets:
-  - **Top Gainers (24h)**
-  - **New Listings (last 72h)**
-  - **Trending** (boosted + high-volume tokens)
-- Builds curated scout feed from markdown reports/database into `data/scout-findings.json`
-- Reads scout context from `memory/scout-findings/` when available and stores summary metadata
-- Writes output to `data/live-data.json`
-- Frontend (`index.html`) fetches both JSON files and renders live cards + Scout Finds
+- Reads curated scout findings from `memory/scout-findings/` directory
+- Builds `data/scout-findings.json` from markdown reports and database
+- Enriches scout findings with live prices from DexScreener → PnL tracking
+- Enriches Strategy/Saylor Stack instruments with live prices → PnL tracking
+- Hourly workflow updates all PnL data automatically
+- Frontend (`index.html`) displays Scout Finds + Strategy Stack with hold-to-earn/reward mechanics
+
+## Content focus
+
+This site is **NOT** a generic market dashboard. It only tracks assets with unique reward mechanisms:
+- Hold-to-earn / staking rewards
+- DePIN infrastructure rewards
+- Revenue sharing protocols
+- AI platform rewards
+- Move-to-earn / location-based rewards
+- Tokenized equity / synthetic stock trackers (Strategy Stack)
+- Other unique wealth-building mechanics
+
+Generic market lists (trending, top gainers, new listings) have been removed — those are available in other apps (DexScreener, etc.).
 
 ## Local run
 
 ```bash
 npm run build:data
+npm run enrich:scout
+npm run enrich:strategy
 ```
 
-Then open `index.html` with a static server (or via GitHub Pages) and it will load `data/live-data.json`.
+Then open `index.html` with a static server (or via GitHub Pages) and it will load scout + strategy data with PnL.
 
 ## Automation (hourly)
 
 Workflow: `.github/workflows/live-data-update.yml`
 
 - Runs every hour (`7 * * * *`)
-- Regenerates `data/live-data.json` and `data/scout-findings.json`
+- Regenerates all data files with live PnL enrichment
 - Commits/pushes only when data changed
-- GitHub Pages serves latest committed data
-
-## Data quality and filters
-
-Current filters for dashboard inclusion:
-
-- Solana chain only
-- Minimum liquidity: **$50,000**
-- Minimum 24h volume: **$25,000**
-- Requires market cap/FDV value
-
-You can adjust thresholds in `scripts/fetch-live-data.mjs`.
+- GitHub Pages serves latest committed data with current prices
