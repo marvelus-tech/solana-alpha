@@ -616,7 +616,18 @@
       const pnlClass = pnlPct >= 0 ? 'pos' : 'neg';
       const pnlSign = pnlPct > 0 ? '+' : '';
       
-      const typeLabel = inst.category === 'solana' ? 'Solana Token' : inst.type === 'preferred' ? 'Preferred' : 'Common Stock';
+      // Type labels with clear distinctions
+      let typeLabel = '';
+      if (inst.type === 'tokenized_equity') {
+        typeLabel = '1:1 Redeemable';
+      } else if (inst.type === 'synthetic_tracker') {
+        typeLabel = 'xStock Tracker';
+      } else if (inst.type === 'preferred') {
+        typeLabel = 'Preferred';
+      } else {
+        typeLabel = 'Common Stock';
+      }
+      
       const priceSource = inst.priceSource ? `(${inst.priceSource})` : '';
       
       const pnlSection = hasPnL ? `
