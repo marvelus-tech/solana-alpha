@@ -307,6 +307,53 @@
     .scout .row{
       padding:var(--spacing-sm);
     }
+    .strategy{
+      margin-top:var(--spacing-lg);
+      margin-bottom:var(--spacing-lg);
+    }
+    .strategy .panel{
+      border:1px solid #e8b44c;
+      box-shadow:var(--shadow-md);
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,rgba(232,180,76,0.02) 0%,var(--surface) 50%);
+    }
+    .strategy .panel::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:2px;
+      background:linear-gradient(90deg,#e8b44c,#f4d03f);
+    }
+    .strategy h2{
+      padding-top:3px;
+      color:var(--text);
+      font-size:1.15rem;
+    }
+    .strategy h2::before{
+      content:'₿';
+      font-size:.9rem;
+      color:#e8b44c;
+      margin-right:8px;
+      font-weight:700;
+    }
+    .strategy .row{
+      padding:var(--spacing-sm);
+    }
+    .instrument-type{
+      display:inline-block;
+      font-size:.68rem;
+      font-weight:600;
+      color:#9f7b2c;
+      background:rgba(232,180,76,0.1);
+      padding:2px 6px;
+      border-radius:4px;
+      margin-left:6px;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
     .badge{
       display:inline-flex;
       align-items:center;
@@ -411,6 +458,13 @@
     </header>
 
     <section class="overview" id="overview"></section>
+
+    <section class="strategy">
+      <article class="panel">
+        <h2>Strategy / Saylor Stack</h2>
+        <div class="list" id="strategyStack"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
+      </article>
+    </section>
 
     <section class="grid">
       <article class="panel">
@@ -556,11 +610,76 @@
       el.innerHTML = arr.slice(0,8).map(scoutRow).join('');
     }
 
+    function strategyRow(inst){
+      const hasPnL = inst.entryPriceUsd > 0 && inst.currentPriceUsd > 0;
+      const pnlPct = inst.pnlPct || 0;
+      const pnlClass = pnlPct >= 0 ? 'pos' : 'neg';
+      const pnlSign = pnlPct > 0 ? '+' : '';
+      
+      const typeLabel = inst.category === 'solana' ? 'Solana Token' : inst.type === 'preferred' ? 'Preferred' : 'Common Stock';
+      const priceSource = inst.priceSource ? `(${inst.priceSource})` : '';
+      
+      const pnlSection = hasPnL ? `
+        <div class="pnl-row">
+          <div class="pnl-item">
+            <span class="pnl-label">Added</span>
+            <span class="pnl-value">${inst.addedAt || 'n/a'}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">Entry</span>
+            <span class="pnl-value">${money(inst.entryPriceUsd)}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">Now ${priceSource}</span>
+            <span class="pnl-value">${money(inst.currentPriceUsd)}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">PnL</span>
+            <span class="pnl-value ${pnlClass}">${pnlSign}${pnlPct.toFixed(2)}%</span>
+          </div>
+        </div>
+      ` : '';
+      
+      const linkUrl = inst.dexUrl || inst.solanaDexUrl || inst.infoUrl;
+      const linkStart = linkUrl ? `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">` : '';
+      const linkEnd = linkUrl ? '</a>' : '';
+      
+      return `<div class="row">${linkStart}
+        <div class="top">
+          <div>
+            <div class="sym">${inst.ticker}<span class="instrument-type">${typeLabel}</span></div>
+            <div class="name">${inst.name}</div>
+          </div>
+        </div>
+        <div class="mechanic">${inst.description}</div>
+        ${pnlSection}
+      ${linkEnd}</div>`;
+    }
+
+    function renderStrategy(arr){
+      const el = document.getElementById('strategyStack');
+      if(!arr || !arr.length){
+        el.innerHTML = '<div class="empty">No Strategy instruments available.</div>';
+        return;
+      }
+      const parentPanel = el.closest('.panel');
+      const header = parentPanel?.querySelector('h2');
+      const displayCount = arr.filter(i => i.currentPriceUsd > 0).length;
+      if(header && !header.querySelector('.panel-count')){
+        const countSpan = document.createElement('span');
+        countSpan.className = 'panel-count';
+        countSpan.textContent = displayCount;
+        header.appendChild(countSpan);
+      }
+      el.innerHTML = arr.map(strategyRow).join('');
+    }
+
     async function load(){
       try{
-        const [liveRes, scoutRes] = await Promise.all([
+        const [liveRes, scoutRes, strategyRes] = await Promise.all([
           fetch('./data/live-data.json?ts='+Date.now(), {cache:'no-store'}),
-          fetch('./data/scout-findings.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null)
+          fetch('./data/scout-findings.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null),
+          fetch('./data/strategy-stack.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null)
         ]);
 
         if(!liveRes.ok) throw new Error(`HTTP ${liveRes.status}`);
@@ -577,6 +696,13 @@
           renderScout([]);
         }
 
+        if(strategyRes && strategyRes.ok){
+          const strategyData = await strategyRes.json();
+          renderStrategy(strategyData.instruments || []);
+        } else {
+          renderStrategy([]);
+        }
+
         const updated = data.generatedAt ? new Date(data.generatedAt) : new Date();
         document.getElementById('updatedAt').innerHTML = `<span class="live-pulse"></span>Last update: ${updated.toLocaleString('en-AU', {timeZone:'Australia/Melbourne'})}`;
       }catch(err){
@@ -584,6 +710,7 @@
           document.getElementById(id).innerHTML = `<div class="empty">Failed to load live data (${err.message}).</div>`;
         });
         document.getElementById('scoutFinds').innerHTML = '<div class="empty">Failed to load scout findings.</div>';
+        document.getElementById('strategyStack').innerHTML = '<div class="empty">Failed to load Strategy stack.</div>';
         document.getElementById('updatedAt').innerHTML = '<span class="live-pulse"></span>Last update: unavailable';
       }
     }
