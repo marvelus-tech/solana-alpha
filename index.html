@@ -414,6 +414,78 @@
     .pnl-value.neg{
       color:var(--neg);
     }
+    .contract-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:var(--spacing-xs);
+      font-size:.78rem;
+      color:var(--muted);
+    }
+    .contract-label{
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-size:.7rem;
+    }
+    .contract-address{
+      font-family:'Courier New',monospace;
+      font-size:.82rem;
+      color:var(--text);
+      background:var(--bg);
+      padding:4px 8px;
+      border-radius:6px;
+      border:1px solid var(--border);
+    }
+    .copy-btn{
+      background:var(--accent);
+      color:white;
+      border:none;
+      border-radius:6px;
+      padding:4px 10px;
+      font-size:.7rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:all var(--duration-fast) var(--ease-smooth);
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      min-width:52px;
+    }
+    .copy-btn:hover{
+      background:#0db88b;
+      transform:translateY(-1px);
+      box-shadow:var(--shadow-sm);
+    }
+    .copy-btn:active{
+      transform:translateY(0);
+    }
+    .copy-btn.copied{
+      background:var(--pos);
+    }
+    .token-logo{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      object-fit:cover;
+      flex-shrink:0;
+      border:2px solid var(--border);
+    }
+    .token-logo-fallback{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:var(--bg);
+      border:2px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.68rem;
+      font-weight:700;
+      color:var(--muted);
+      flex-shrink:0;
+      font-family:'Space Grotesk',sans-serif;
+      letter-spacing:-.02em;
+    }
     a{
       color:inherit;
       text-decoration:none;
@@ -601,6 +673,11 @@
       return 'conf-low';
     }
 
+    function getInitials(ticker) {
+      if (!ticker) return '??';
+      return ticker.slice(0, Math.min(3, ticker.length)).toUpperCase();
+    }
+
     function scoutRow(t){
       const conf = Number(t.confidence||0);
       const hasPnL = t.entryPriceUsd > 0 && t.currentPriceUsd > 0;
@@ -608,14 +685,28 @@
       const pnlClass = pnlPct >= 0 ? 'pos' : 'neg';
       const pnlSign = pnlPct > 0 ? '+' : '';
       
+      // Logo with fallback
+      const logoHtml = t.imageUrl 
+        ? `<img src="${t.imageUrl}" alt="${t.ticker}" class="token-logo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="token-logo-fallback" style="display:none;">${getInitials(t.ticker)}</div>`
+        : `<div class="token-logo-fallback">${getInitials(t.ticker)}</div>`;
+      
+      // Contract address with copy
+      const contractHtml = t.tokenAddress ? `
+        <div class="contract-row" onclick="event.preventDefault(); event.stopPropagation(); copyAddress('${t.tokenAddress}', this);">
+          <span class="contract-label">Mint</span>
+          <span class="contract-address">${t.tokenAddress.slice(0,4)}…${t.tokenAddress.slice(-4)}</span>
+          <button class="copy-btn" type="button">Copy</button>
+        </div>
+      ` : '';
+      
       const pnlSection = hasPnL ? `
         <div class="pnl-row">
           <div class="pnl-item">
-            <span class="pnl-label">Added</span>
+            <span class="pnl-label">Tracked since</span>
             <span class="pnl-value">${t.addedAt || 'n/a'}</span>
           </div>
           <div class="pnl-item">
-            <span class="pnl-label">Entry</span>
+            <span class="pnl-label">Tracked @</span>
             <span class="pnl-value">${money(t.entryPriceUsd)}</span>
           </div>
           <div class="pnl-item">
@@ -634,9 +725,12 @@
       
       return `<div class="row">${linkStart}
         <div class="top">
-          <div>
-            <div class="sym">${t.name} <span class="name">$${t.ticker}</span></div>
-            <div class="name">MCap ${t.marketCap || 'n/a'}</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            ${logoHtml}
+            <div>
+              <div class="sym">${t.name} <span class="name">$${t.ticker}</span></div>
+              <div class="name">MCap ${t.marketCap || 'n/a'}</div>
+            </div>
           </div>
           <div class="labels">
             ${t.isNew ? '<span class="badge new">New</span>' : ''}
@@ -644,6 +738,7 @@
           </div>
         </div>
         <div class="mechanic">${t.rewardMechanic || 'Hold-to-earn mechanics tracked by scout.'}</div>
+        ${contractHtml}
         ${pnlSection}
       ${linkEnd}</div>`;
     }
@@ -684,16 +779,31 @@
         typeLabel = 'Common Stock';
       }
       
+      // Logo with fallback
+      const logoHtml = inst.imageUrl 
+        ? `<img src="${inst.imageUrl}" alt="${inst.ticker}" class="token-logo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="token-logo-fallback" style="display:none;">${getInitials(inst.ticker)}</div>`
+        : `<div class="token-logo-fallback">${getInitials(inst.ticker)}</div>`;
+      
+      // Contract address with copy (prefer tokenAddress, fall back to solanaTokenAddress)
+      const contractAddress = inst.tokenAddress || inst.solanaTokenAddress;
+      const contractHtml = contractAddress ? `
+        <div class="contract-row" onclick="event.preventDefault(); event.stopPropagation(); copyAddress('${contractAddress}', this);">
+          <span class="contract-label">Mint</span>
+          <span class="contract-address">${contractAddress.slice(0,4)}…${contractAddress.slice(-4)}</span>
+          <button class="copy-btn" type="button">Copy</button>
+        </div>
+      ` : '';
+      
       const priceSource = inst.priceSource ? `(${inst.priceSource})` : '';
       
       const pnlSection = hasPnL ? `
         <div class="pnl-row">
           <div class="pnl-item">
-            <span class="pnl-label">Added</span>
+            <span class="pnl-label">Tracked since</span>
             <span class="pnl-value">${inst.addedAt || 'n/a'}</span>
           </div>
           <div class="pnl-item">
-            <span class="pnl-label">Entry</span>
+            <span class="pnl-label">Tracked @</span>
             <span class="pnl-value">${money(inst.entryPriceUsd)}</span>
           </div>
           <div class="pnl-item">
@@ -713,12 +823,16 @@
       
       return `<div class="row">${linkStart}
         <div class="top">
-          <div>
-            <div class="sym">${inst.ticker}<span class="instrument-type">${typeLabel}</span></div>
-            <div class="name">${inst.name}</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            ${logoHtml}
+            <div>
+              <div class="sym">${inst.ticker}<span class="instrument-type">${typeLabel}</span></div>
+              <div class="name">${inst.name}</div>
+            </div>
           </div>
         </div>
         <div class="mechanic">${inst.description}</div>
+        ${contractHtml}
         ${pnlSection}
       ${linkEnd}</div>`;
     }
@@ -777,6 +891,60 @@
     }
 
     load();
+
+    // Copy contract address to clipboard
+    function copyAddress(address, element) {
+      const btn = element.querySelector('.copy-btn');
+      if (!btn) return;
+      
+      const originalText = btn.textContent;
+      
+      // Try modern clipboard API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(address)
+          .then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.classList.remove('copied');
+            }, 1500);
+          })
+          .catch(() => {
+            // Fallback to older method
+            fallbackCopy(address, btn, originalText);
+          });
+      } else {
+        // Fallback for older browsers
+        fallbackCopy(address, btn, originalText);
+      }
+    }
+
+    function fallbackCopy(text, btn, originalText) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      
+      try {
+        document.execCommand('copy');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('copied');
+        }, 1500);
+      } catch (err) {
+        btn.textContent = 'Failed';
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 1500);
+      }
+      
+      document.body.removeChild(textarea);
+    }
 
     // Agent demo function
     async function runAgentDemo() {
