@@ -146,16 +146,6 @@
       margin-top:6px;
       font-variant-numeric:tabular-nums;
     }
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:var(--spacing-md);
-      margin-bottom:var(--spacing-lg);
-      align-items:start;
-    }
-    @media (min-width:920px){
-      .grid{grid-template-columns:repeat(3,1fr)}
-    }
     .panel{
       background:var(--surface);
       border-radius:var(--radius-panel);
@@ -296,6 +286,9 @@
     .scout h2{
       padding-top:4px;
       color:var(--text);
+    }
+    .scout h2{
+      font-size:1.25rem;
     }
     .scout h2::before{
       content:'⬤';
@@ -452,7 +445,7 @@
     <header class="bar">
       <div>
         <h1>Solana Alpha</h1>
-        <p class="sub">Live token intelligence from DexScreener + scout findings context.</p>
+        <p class="sub">Tracking reward-generating assets and wealth-building instruments on Solana.</p>
       </div>
       <div class="updated" id="updatedAt"><span class="live-pulse"></span>Updating…</div>
     </header>
@@ -466,24 +459,10 @@
       </article>
     </section>
 
-    <section class="grid">
-      <article class="panel">
-        <h2>Top Gainers (24h)</h2>
-        <div class="list" id="gainers"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
-      </article>
-      <article class="panel">
-        <h2>New Listings (72h)</h2>
-        <div class="list" id="newListings"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
-      </article>
-      <article class="panel">
-        <h2>Trending</h2>
-        <div class="list" id="trending"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
-      </article>
-    </section>
 
     <section class="scout">
       <article class="panel">
-        <h2>Scout Finds</h2>
+        <h2>Scout Finds — Hold-to-Earn Focus</h2>
         <div class="list" id="scoutFinds"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
       </article>
     </section>
@@ -501,41 +480,19 @@
       return `${Math.floor(h/24)}d`;
     };
 
-    function renderOverview(m){
+    function renderOverview(scoutData, strategyData){
+      const scoutCount = (scoutData?.tokens || []).length;
+      const strategyCount = (strategyData?.instruments || []).filter(i => i.currentPriceUsd > 0).length;
+      const scoutWithPnL = (scoutData?.tokens || []).filter(t => t.entryPriceUsd > 0).length;
+      const strategyWithPnL = (strategyData?.instruments || []).filter(i => i.entryPriceUsd > 0).length;
+      
       const data = [
-        ['Token Universe', m.tokenUniverse],
-        ['Investable', m.investableUniverse],
-        ['24h Volume', compactMoney(m.total24hVolumeUsd)],
-        ['Liquidity', compactMoney(m.totalLiquidityUsd)],
-        ['Avg 24h Change', pct(m.avg24hChangePct)],
-        ['Gainers / Losers', `${m.gainersCount} / ${m.losersCount}`]
+        ['Scout Finds', scoutCount],
+        ['Strategy Instruments', strategyCount],
+        ['Scout w/ PnL', scoutWithPnL],
+        ['Strategy w/ PnL', strategyWithPnL]
       ];
       document.getElementById('overview').innerHTML = data.map(([k,v])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
-    }
-
-    function tokenRow(t, withAge=false){
-      const chgClass = Number(t.priceChange24h) >= 0 ? 'pos' : 'neg';
-      const linkStart = t.url ? `<a href="${t.url}" target="_blank" rel="noopener noreferrer">` : '';
-      const linkEnd = t.url ? '</a>' : '';
-      return `<div class="row">${linkStart}
-        <div class="top">
-          <div><div class="sym">${t.symbol}</div><div class="name">${t.name}</div></div>
-          <div class="num"><div class="price">${money(t.priceUsd)}</div><div class="chg ${chgClass}">${pct(t.priceChange24h)}</div></div>
-        </div>
-        <div class="meta"><span>MCap ${compactMoney(t.marketCap)}</span><span>Vol ${compactMoney(t.volume24h)}</span>${withAge?`<span>${age(t.pairCreatedAt)}</span>`:''}</div>
-      ${linkEnd}</div>`;
-    }
-
-    function renderList(id, arr, withAge=false){
-      const el = document.getElementById(id);
-      if(!arr || !arr.length){el.innerHTML='<div class="empty">No live tokens matched current filters.</div>'; return;}
-      const parentPanel = el.closest('.panel');
-      const header = parentPanel?.querySelector('h2');
-      const displayCount = Math.min(arr.length, 10);
-      if(header && !header.querySelector('.panel-count')){
-        header.innerHTML = header.textContent + `<span class="panel-count">${displayCount}</span>`;
-      }
-      el.innerHTML = arr.slice(0,10).map((t)=>tokenRow(t, withAge)).join('');
     }
 
     function confidenceClass(conf){
@@ -687,39 +644,33 @@
 
     async function load(){
       try{
-        const [liveRes, scoutRes, strategyRes] = await Promise.all([
-          fetch('./data/live-data.json?ts='+Date.now(), {cache:'no-store'}),
+        const [scoutRes, strategyRes] = await Promise.all([
           fetch('./data/scout-findings.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null),
           fetch('./data/strategy-stack.json?ts='+Date.now(), {cache:'no-store'}).catch(()=>null)
         ]);
 
-        if(!liveRes.ok) throw new Error(`HTTP ${liveRes.status}`);
-        const data = await liveRes.json();
-        renderOverview(data.marketOverview || {});
-        renderList('gainers', data.topGainers || []);
-        renderList('newListings', data.newListings || [], true);
-        renderList('trending', data.trending || []);
+        let scoutData = null;
+        let strategyData = null;
 
         if(scoutRes && scoutRes.ok){
-          const scoutData = await scoutRes.json();
+          scoutData = await scoutRes.json();
           renderScout(scoutData.tokens || []);
         } else {
           renderScout([]);
         }
 
         if(strategyRes && strategyRes.ok){
-          const strategyData = await strategyRes.json();
+          strategyData = await strategyRes.json();
           renderStrategy(strategyData.instruments || []);
         } else {
           renderStrategy([]);
         }
 
-        const updated = data.generatedAt ? new Date(data.generatedAt) : new Date();
+        renderOverview(scoutData, strategyData);
+
+        const updated = new Date();
         document.getElementById('updatedAt').innerHTML = `<span class="live-pulse"></span>Last update: ${updated.toLocaleString('en-AU', {timeZone:'Australia/Melbourne'})}`;
       }catch(err){
-        ['gainers','newListings','trending'].forEach((id)=>{
-          document.getElementById(id).innerHTML = `<div class="empty">Failed to load live data (${err.message}).</div>`;
-        });
         document.getElementById('scoutFinds').innerHTML = '<div class="empty">Failed to load scout findings.</div>';
         document.getElementById('strategyStack').innerHTML = '<div class="empty">Failed to load Strategy stack.</div>';
         document.getElementById('updatedAt').innerHTML = '<span class="live-pulse"></span>Last update: unavailable';

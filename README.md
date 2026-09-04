@@ -1,22 +1,15 @@
-# Solana Alpha — Live Data Pipeline
+# Solana Alpha — Reward-Generating Assets Dashboard
 
-This dashboard now renders **real Solana market data** from API-generated JSON (no hardcoded fake stats).
+This dashboard focuses on **unique wealth-building instruments**: curated Scout Finds with hold-to-earn mechanics and the Strategy / Saylor Stack of tokenized equities and synthetic trackers.
 
 ## What the pipeline does
 
-- Pulls live token universe from DexScreener:
-  - `token-profiles/latest/v1`
-  - `token-boosts/top/v1`
-  - `token-boosts/latest/v1`
-  - `tokens/v1/solana/{tokenAddresses}`
-- Builds dashboard datasets:
-  - **Top Gainers (24h)**
-  - **New Listings (last 72h)**
-  - **Trending** (boosted + high-volume tokens)
-- Builds curated scout feed from markdown reports/database into `data/scout-findings.json`
-- Reads scout context from `memory/scout-findings/` when available and stores summary metadata
-- Writes output to `data/live-data.json`
-- Frontend (`index.html`) fetches both JSON files and renders live cards + Scout Finds
+- Enriches **Scout Finds** from curated markdown reports with live DexScreener prices
+- Enriches **Strategy / Saylor Stack** instruments with live market data
+- Builds datasets:
+  - `data/scout-findings.json` — reward-generating tokens with PnL tracking
+  - `data/strategy-stack.json` — tokenized equities & trackers with PnL
+- Frontend (`index.html`) fetches both JSON files and renders Scout + Strategy panels with full PnL
 
 ## Local run
 
@@ -24,24 +17,19 @@ This dashboard now renders **real Solana market data** from API-generated JSON (
 npm run build:data
 ```
 
-Then open `index.html` with a static server (or via GitHub Pages) and it will load `data/live-data.json`.
+Then open `index.html` with a static server (or via GitHub Pages).
 
 ## Automation (hourly)
 
 Workflow: `.github/workflows/live-data-update.yml`
 
 - Runs every hour (`7 * * * *`)
-- Regenerates `data/live-data.json` and `data/scout-findings.json`
+- Regenerates `data/scout-findings.json` and `data/strategy-stack.json` with live prices
 - Commits/pushes only when data changed
 - GitHub Pages serves latest committed data
 
-## Data quality and filters
+## Scripts
 
-Current filters for dashboard inclusion:
-
-- Solana chain only
-- Minimum liquidity: **$50,000**
-- Minimum 24h volume: **$25,000**
-- Requires market cap/FDV value
-
-You can adjust thresholds in `scripts/fetch-live-data.mjs`.
+- `scripts/enrich-scout-prices.mjs` — enriches scout findings with DexScreener prices & PnL
+- `scripts/enrich-strategy-stack.mjs` — enriches strategy instruments with market data & PnL
+- Both preserve `.tastemaker/` metadata and existing data structures
