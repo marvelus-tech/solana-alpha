@@ -1,0 +1,57 @@
+# Solana Alpha
+
+> Tracking reward-generating assets and wealth-building instruments on Solana
+
+## URLs
+
+- Dashboard: https://marvelus-tech.github.io/solana-alpha/
+- Repository: https://github.com/marvelus-tech/solana-alpha
+- Agent guide: https://github.com/marvelus-tech/solana-alpha/blob/main/AGENTS.md
+
+## Description
+
+Read-only dashboard tracking:
+- 62 curated hold-to-earn / reward-generating Solana tokens
+- 8 Strategy Inc (MSTR) instruments: common stock, preferreds, tokenized equity, synthetic trackers
+
+All with entry/current prices and PnL tracking from addition date.
+
+## Agent-Callable
+
+### WebMCP (Browser Agents)
+Open https://marvelus-tech.github.io/solana-alpha/ — tools auto-register via document.modelContext
+
+### Remote MCP (Non-Browser Agents)
+Endpoint: https://solana-alpha-mcp.YOURACCOUNT.workers.dev/mcp  
+Protocol: Streamable HTTP JSON-RPC  
+Deploy: See mcp-worker/README.md
+
+### Direct JSON
+- Scout: https://marvelus-tech.github.io/solana-alpha/data/scout-findings.json
+- Strategy: https://marvelus-tech.github.io/solana-alpha/data/strategy-stack.json
+
+## Tools
+
+6 read-only tools, all return envelope `{ok, data, meta, delight}`:
+1. describe_site — What Solana Alpha is, sections, jobs
+2. describe_page — Page metadata, canonical URL
+3. list_scout_assets — 62 hold-to-earn tokens
+4. list_strategy_stack — 8 Strategy instruments
+5. get_asset — Lookup by ticker (FLOCK, MSTR, etc.)
+6. get_overview — Counts and confidence stats
+
+## Voice
+
+Precise, dry, curator, light trading-desk, restrained. No hype. Delight beats optional (18 rotating lines, skip for serious contexts).
+
+## Data Refresh
+
+Hourly via GitHub Action. Last enriched timestamp in JSON files.
+
+## Docs
+
+- docs/site-map.md — Content, voice, tool catalog
+- docs/agent-dry-run.md — Example interactions
+- docs/delight-infusion.md — Personality pattern
+- agent/README.md — Integration guide
+- agent/tools.json — Tool specifications

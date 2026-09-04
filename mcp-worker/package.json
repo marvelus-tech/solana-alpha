@@ -1,0 +1,22 @@
+{
+  "name": "solana-alpha-mcp",
+  "version": "1.0.0",
+  "description": "Remote MCP server for Solana Alpha dashboard",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tail": "wrangler tail"
+  },
+  "keywords": [
+    "mcp",
+    "solana",
+    "cloudflare-workers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
