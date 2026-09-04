@@ -28,6 +28,10 @@ jobs:
         run: |
           npm run convert:scout
 
+      - name: Enrich scout prices with live PnL
+        run: |
+          npm run enrich:scout
+
       - name: Commit updated data
         run: |
           if git diff --quiet data/live-data.json data/scout-findings.json; then

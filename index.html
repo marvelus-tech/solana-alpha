@@ -343,6 +343,37 @@
       margin-top:var(--spacing-xs);
       line-height:1.4;
     }
+    .pnl-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+      gap:var(--spacing-xs);
+      margin-top:var(--spacing-xs);
+      font-size:.78rem;
+      padding-top:var(--spacing-xs);
+      border-top:1px solid var(--border);
+    }
+    .pnl-item{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .pnl-label{
+      color:var(--muted);
+      font-size:.7rem;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-weight:600;
+    }
+    .pnl-value{
+      font-weight:600;
+      font-variant-numeric:tabular-nums;
+    }
+    .pnl-value.pos{
+      color:var(--pos);
+    }
+    .pnl-value.neg{
+      color:var(--neg);
+    }
     a{
       color:inherit;
       text-decoration:none;
@@ -462,7 +493,36 @@
 
     function scoutRow(t){
       const conf = Number(t.confidence||0);
-      return `<div class="row">
+      const hasPnL = t.entryPriceUsd > 0 && t.currentPriceUsd > 0;
+      const pnlPct = t.pnlPct || 0;
+      const pnlClass = pnlPct >= 0 ? 'pos' : 'neg';
+      const pnlSign = pnlPct > 0 ? '+' : '';
+      
+      const pnlSection = hasPnL ? `
+        <div class="pnl-row">
+          <div class="pnl-item">
+            <span class="pnl-label">Added</span>
+            <span class="pnl-value">${t.addedAt || 'n/a'}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">Entry</span>
+            <span class="pnl-value">${money(t.entryPriceUsd)}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">Now</span>
+            <span class="pnl-value">${money(t.currentPriceUsd)}</span>
+          </div>
+          <div class="pnl-item">
+            <span class="pnl-label">PnL</span>
+            <span class="pnl-value ${pnlClass}">${pnlSign}${pnlPct.toFixed(2)}%</span>
+          </div>
+        </div>
+      ` : '';
+      
+      const linkStart = t.dexUrl ? `<a href="${t.dexUrl}" target="_blank" rel="noopener noreferrer">` : '';
+      const linkEnd = t.dexUrl ? '</a>' : '';
+      
+      return `<div class="row">${linkStart}
         <div class="top">
           <div>
             <div class="sym">${t.name} <span class="name">$${t.ticker}</span></div>
@@ -474,7 +534,8 @@
           </div>
         </div>
         <div class="mechanic">${t.rewardMechanic || 'Hold-to-earn mechanics tracked by scout.'}</div>
-      </div>`;
+        ${pnlSection}
+      ${linkEnd}</div>`;
     }
 
     function renderScout(arr){

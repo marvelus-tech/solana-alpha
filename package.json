@@ -6,6 +6,7 @@
   "scripts": {
     "convert:scout": "node scripts/convert-scout-data.mjs",
     "fetch:data": "node scripts/fetch-live-data.mjs",
-    "build:data": "npm run fetch:data && npm run convert:scout"
+    "enrich:scout": "node scripts/enrich-scout-prices.mjs",
+    "build:data": "npm run fetch:data && npm run convert:scout && npm run enrich:scout"
   }
 }
