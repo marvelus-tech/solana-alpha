@@ -56,7 +56,8 @@ async function searchTokenByTicker(ticker) {
       pairAddress: best?.pairAddress,
       dexUrl: best?.url,
       priceUsd: safeNumber(best?.priceUsd),
-      liquidity: safeNumber(best?.liquidity?.usd)
+      liquidity: safeNumber(best?.liquidity?.usd),
+      imageUrl: best?.info?.imageUrl || best?.baseToken?.info?.imageUrl
     };
   } catch (error) {
     console.error(`Failed to search ticker ${ticker}:`, error.message);
@@ -82,7 +83,8 @@ async function fetchTokenPrice(tokenAddress) {
       priceUsd: safeNumber(best?.priceUsd),
       liquidity: safeNumber(best?.liquidity?.usd),
       pairAddress: best?.pairAddress,
-      dexUrl: best?.url
+      dexUrl: best?.url,
+      imageUrl: best?.info?.imageUrl || best?.baseToken?.info?.imageUrl
     };
   } catch (error) {
     console.error(`Failed to fetch price for ${tokenAddress}:`, error.message);
@@ -125,6 +127,7 @@ async function enrichScoutTokens() {
         token.tokenAddress = searchResult.tokenAddress;
         token.pairAddress = searchResult.pairAddress;
         token.dexUrl = searchResult.dexUrl;
+        if (searchResult.imageUrl) token.imageUrl = searchResult.imageUrl;
         updated = true;
         console.log(`  ✓ Found tokenAddress: ${token.tokenAddress.slice(0, 8)}...`);
       } else {
@@ -146,6 +149,10 @@ async function enrichScoutTokens() {
         }
         if (priceData.dexUrl && !token.dexUrl) {
           token.dexUrl = priceData.dexUrl;
+        }
+        if (priceData.imageUrl && !token.imageUrl) {
+          token.imageUrl = priceData.imageUrl;
+          updated = true;
         }
         
         // Bootstrap entry price if missing (immutable after first set)

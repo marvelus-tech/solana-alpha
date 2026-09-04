@@ -11,11 +11,11 @@
       "addedAt": "2026-09-04",
       "solanaTokenAddress": "7MsJCvDi5t5U3Ya2UAs5bR75VJyVMr2FKdzGmeg2rise",
       "solanaDexUrl": "https://dexscreener.com/solana/dmryq83qiugurjd36qky5y2cefzajqrhuxw8kyvg1z2e",
-      "currentPriceUsd": 144.82,
-      "priceUpdatedAt": "2026-09-04T01:07:17.164Z",
+      "currentPriceUsd": 142.8,
+      "priceUpdatedAt": "2026-09-04T23:44:03.298Z",
       "priceSource": "Yahoo Finance",
       "entryPriceUsd": 144.82,
-      "pnlPct": 0
+      "pnlPct": -1.3948349675459066
     },
     {
       "ticker": "MSTR",
@@ -27,11 +27,11 @@
       "infoUrl": "https://backpack.exchange",
       "addedAt": "2026-09-04",
       "dexUrl": "https://dexscreener.com/solana/3hro9bwkxiyv7zfh2zbdqyunevzt69ixnyqbamcvyvys",
-      "currentPriceUsd": 142.38,
-      "priceUpdatedAt": "2026-09-04T01:07:17.618Z",
+      "currentPriceUsd": 142.66,
+      "priceUpdatedAt": "2026-09-04T23:44:03.828Z",
       "priceSource": "DexScreener",
       "entryPriceUsd": 142.38,
-      "pnlPct": 0
+      "pnlPct": 0.1966568338249762
     },
     {
       "ticker": "MSTRx",
@@ -43,11 +43,11 @@
       "infoUrl": "https://dexscreener.com",
       "addedAt": "2026-09-04",
       "dexUrl": "https://dexscreener.com/solana/ryhf4cksvzy7vcqjpoythcxcgnkrp27peghsneppbgv",
-      "currentPriceUsd": 142.25,
-      "priceUpdatedAt": "2026-09-04T01:07:18.044Z",
+      "currentPriceUsd": 142.73,
+      "priceUpdatedAt": "2026-09-04T23:44:04.253Z",
       "priceSource": "DexScreener",
       "entryPriceUsd": 142.25,
-      "pnlPct": 0
+      "pnlPct": 0.337434094903332
     },
     {
       "ticker": "STRF",
@@ -60,11 +60,11 @@
       "addedAt": "2026-09-04",
       "solanaTokenAddress": "7MsJCvDi5t5U3Ya2UAs5bR75VJyVMr2FKdzGmeg2rise",
       "solanaDexUrl": "https://dexscreener.com/solana/dmryq83qiugurjd36qky5y2cefzajqrhuxw8kyvg1z2e",
-      "currentPriceUsd": 104.4,
-      "priceUpdatedAt": "2026-09-04T01:07:18.600Z",
+      "currentPriceUsd": 104.3,
+      "priceUpdatedAt": "2026-09-04T23:44:04.853Z",
       "priceSource": "Yahoo Finance",
       "entryPriceUsd": 104.4,
-      "pnlPct": 0
+      "pnlPct": -0.09578544061303498
     },
     {
       "ticker": "STRC",
@@ -77,11 +77,11 @@
       "addedAt": "2026-09-04",
       "solanaTokenAddress": "7MsJCvDi5t5U3Ya2UAs5bR75VJyVMr2FKdzGmeg2rise",
       "solanaDexUrl": "https://dexscreener.com/solana/dmryq83qiugurjd36qky5y2cefzajqrhuxw8kyvg1z2e",
-      "currentPriceUsd": 97.82,
-      "priceUpdatedAt": "2026-09-04T01:07:19.317Z",
+      "currentPriceUsd": 97.75,
+      "priceUpdatedAt": "2026-09-04T23:44:05.447Z",
       "priceSource": "Yahoo Finance",
       "entryPriceUsd": 97.82,
-      "pnlPct": 0
+      "pnlPct": -0.07156000817827968
     },
     {
       "ticker": "STRCx",
@@ -93,11 +93,11 @@
       "infoUrl": "https://dexscreener.com",
       "addedAt": "2026-09-04",
       "dexUrl": "https://dexscreener.com/solana/du9dgbu6yh2jjsycjtry21g14dhqxn6xm5pt949sa4ta",
-      "currentPriceUsd": 105.8,
-      "priceUpdatedAt": "2026-09-04T01:07:19.743Z",
+      "currentPriceUsd": 106.0018,
+      "priceUpdatedAt": "2026-09-04T23:44:05.892Z",
       "priceSource": "DexScreener",
       "entryPriceUsd": 105.8,
-      "pnlPct": 0
+      "pnlPct": 0.1907372400756198
     },
     {
       "ticker": "STRK",
@@ -110,11 +110,11 @@
       "addedAt": "2026-09-04",
       "solanaTokenAddress": "7MsJCvDi5t5U3Ya2UAs5bR75VJyVMr2FKdzGmeg2rise",
       "solanaDexUrl": "https://dexscreener.com/solana/dmryq83qiugurjd36qky5y2cefzajqrhuxw8kyvg1z2e",
-      "currentPriceUsd": 77.1,
-      "priceUpdatedAt": "2026-09-04T01:07:20.457Z",
+      "currentPriceUsd": 77.77,
+      "priceUpdatedAt": "2026-09-04T23:44:06.471Z",
       "priceSource": "Yahoo Finance",
       "entryPriceUsd": 77.1,
-      "pnlPct": 0
+      "pnlPct": 0.8690012970168635
     },
     {
       "ticker": "STRD",
@@ -127,11 +127,11 @@
       "addedAt": "2026-09-04",
       "solanaTokenAddress": "7MsJCvDi5t5U3Ya2UAs5bR75VJyVMr2FKdzGmeg2rise",
       "solanaDexUrl": "https://dexscreener.com/solana/dmryq83qiugurjd36qky5y2cefzajqrhuxw8kyvg1z2e",
-      "currentPriceUsd": 75.85,
-      "priceUpdatedAt": "2026-09-04T01:07:21.039Z",
+      "currentPriceUsd": 75.9,
+      "priceUpdatedAt": "2026-09-04T23:44:07.107Z",
       "priceSource": "Yahoo Finance",
       "entryPriceUsd": 75.85,
-      "pnlPct": 0
+      "pnlPct": 0.06591957811471505
     },
     {
       "ticker": "STRE",
@@ -146,5 +146,5 @@
       "solanaDexUrl": "https://dexscreener.com/solana/5lrrfergv885eugjnxqq9di5neratuwyrb5rsj6rjafk"
     }
   ],
-  "enrichedAt": "2026-09-04T01:07:23.592Z"
+  "enrichedAt": "2026-09-04T23:44:09.864Z"
 }

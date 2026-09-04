@@ -55,7 +55,8 @@ async function fetchSolanaTokenPrice(tokenAddress) {
       source: 'DexScreener',
       liquidity: safeNumber(best?.liquidity?.usd),
       pairAddress: best?.pairAddress,
-      dexUrl: best?.url
+      dexUrl: best?.url,
+      imageUrl: best?.info?.imageUrl || best?.baseToken?.info?.imageUrl
     };
   } catch (error) {
     console.error(`Failed to fetch Solana price for ${tokenAddress}:`, error.message);
@@ -83,7 +84,8 @@ async function searchSolanaTokenByTicker(ticker) {
       source: 'DexScreener',
       tokenAddress: best?.baseToken?.address,
       pairAddress: best?.pairAddress,
-      dexUrl: best?.url
+      dexUrl: best?.url,
+      imageUrl: best?.info?.imageUrl || best?.baseToken?.info?.imageUrl
     };
   } catch (error) {
     console.error(`Failed to search Solana for ${ticker}:`, error.message);
@@ -154,6 +156,11 @@ async function enrichStrategyStack() {
         instrument.dexUrl = priceData.dexUrl;
         updated = true;
       }
+      // Store imageUrl if available
+      if (priceData?.imageUrl && !instrument.imageUrl) {
+        instrument.imageUrl = priceData.imageUrl;
+        updated = true;
+      }
     } else if (instrument.category === 'traditional') {
       console.log(`  → Fetching ${instrument.exchange} price...`);
       priceData = await fetchTraditionalStockPrice(instrument.ticker);
@@ -164,6 +171,7 @@ async function enrichStrategyStack() {
         console.log(`  → Found Solana representation: ${solanaPrice.tokenAddress?.slice(0, 8)}...`);
         instrument.solanaTokenAddress = solanaPrice.tokenAddress;
         instrument.solanaDexUrl = solanaPrice.dexUrl;
+        if (solanaPrice.imageUrl) instrument.imageUrl = solanaPrice.imageUrl;
         updated = true;
       }
       
