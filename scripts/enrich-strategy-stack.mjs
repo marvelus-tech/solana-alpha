@@ -9,6 +9,14 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const STRATEGY_DATA_PATH = path.join(REPO_ROOT, 'data', 'strategy-stack.json');
 const DEX_BASE = 'https://api.dexscreener.com';
 
+// Allowlist of verified Solana mints for Strategy instruments
+// Only these mints are legitimate - never search DexScreener for Strategy tickers
+const VERIFIED_SOLANA_MINTS = new Set([
+  'MSTRdWXMeZxdE8osAQy3fA4rvTY5rgummDSMEx6U7Nz', // Backpack MSTR 1:1 redeemable
+  'XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ',  // MSTRx xStock tracker
+  'Xs78JED6PFZxWc2wCEPspZW9kL3Se5J7L5TChKgsidH'   // STRCx xStock tracker
+]);
+
 async function fetchJson(url, retries = 2) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -64,34 +72,10 @@ async function fetchSolanaTokenPrice(tokenAddress) {
   }
 }
 
-async function searchSolanaTokenByTicker(ticker) {
-  try {
-    const searchUrl = `${DEX_BASE}/latest/dex/search?q=${encodeURIComponent(ticker)} solana`;
-    const result = await fetchJson(searchUrl);
-    const solanaPairs = (result?.pairs || []).filter((p) => p?.chainId === 'solana');
-    
-    if (solanaPairs.length === 0) return null;
-    
-    // Pick pair with highest liquidity
-    const best = solanaPairs.reduce((acc, pair) => {
-      const liq = safeNumber(pair?.liquidity?.usd);
-      const accLiq = safeNumber(acc?.liquidity?.usd);
-      return liq > accLiq ? pair : acc;
-    }, solanaPairs[0]);
-    
-    return {
-      priceUsd: safeNumber(best?.priceUsd),
-      source: 'DexScreener',
-      tokenAddress: best?.baseToken?.address,
-      pairAddress: best?.pairAddress,
-      dexUrl: best?.url,
-      imageUrl: best?.info?.imageUrl || best?.baseToken?.info?.imageUrl
-    };
-  } catch (error) {
-    console.error(`Failed to search Solana for ${ticker}:`, error.message);
-    return null;
-  }
-}
+// searchSolanaTokenByTicker() REMOVED
+// This function was dangerous - ticker ambiguity caused wrong token matches
+// Strategy ticker search (STRF, STRC, etc.) matched unrelated Solana tokens
+// New policy: Only allowlisted mints accepted (see VERIFIED_SOLANA_MINTS)
 
 async function fetchTraditionalStockPrice(ticker) {
   try {
@@ -148,13 +132,19 @@ async function enrichStrategyStack() {
     
     // Fetch price based on category
     if (instrument.category === 'solana' && instrument.tokenAddress) {
-      console.log(`  → Fetching Solana token price...`);
-      priceData = await fetchSolanaTokenPrice(instrument.tokenAddress);
-      
-      // If we have dexUrl, update it
-      if (priceData?.dexUrl && !instrument.dexUrl) {
-        instrument.dexUrl = priceData.dexUrl;
-        updated = true;
+      // Validate that Solana instruments use verified mints only
+      if (!VERIFIED_SOLANA_MINTS.has(instrument.tokenAddress)) {
+        console.log(`  ✗ WARNING: Solana instrument has unverified mint: ${instrument.tokenAddress}`);
+        console.log(`  → Skipping price fetch for unverified mint`);
+      } else {
+        console.log(`  → Fetching Solana token price...`);
+        priceData = await fetchSolanaTokenPrice(instrument.tokenAddress);
+        
+        // If we have dexUrl, update it
+        if (priceData?.dexUrl && !instrument.dexUrl) {
+          instrument.dexUrl = priceData.dexUrl;
+          updated = true;
+        }
       }
       // Store imageUrl if available
       if (priceData?.imageUrl && !instrument.imageUrl) {
@@ -165,14 +155,16 @@ async function enrichStrategyStack() {
       console.log(`  → Fetching ${instrument.exchange} price...`);
       priceData = await fetchTraditionalStockPrice(instrument.ticker);
       
-      // Also try to find Solana representation
-      const solanaPrice = await searchSolanaTokenByTicker(instrument.ticker);
-      if (solanaPrice && !instrument.solanaTokenAddress) {
-        console.log(`  → Found Solana representation: ${solanaPrice.tokenAddress?.slice(0, 8)}...`);
-        instrument.solanaTokenAddress = solanaPrice.tokenAddress;
-        instrument.solanaDexUrl = solanaPrice.dexUrl;
-        if (solanaPrice.imageUrl) instrument.imageUrl = solanaPrice.imageUrl;
-        updated = true;
+      // NEVER search DexScreener for traditional Strategy instruments
+      // Ticker ambiguity (STRF, STRC, etc.) leads to wrong token matches
+      // If an instrument has existing solana fields, validate them against allowlist
+      if (instrument.solanaTokenAddress) {
+        if (!VERIFIED_SOLANA_MINTS.has(instrument.solanaTokenAddress)) {
+          console.log(`  ✗ Removing unverified Solana mint: ${instrument.solanaTokenAddress}`);
+          delete instrument.solanaTokenAddress;
+          delete instrument.solanaDexUrl;
+          updated = true;
+        }
       }
       
       // Update infoUrl if we got one
