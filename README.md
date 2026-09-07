@@ -1,6 +1,6 @@
-# Solana Alpha — Reward-Generating Assets Dashboard
+# Invest-Innovation: Reward-Generating Assets Dashboard
 
-This dashboard focuses on **unique wealth-building instruments**: curated Scout Finds with hold-to-earn mechanics and the Strategy / Saylor Stack of tokenized equities and synthetic trackers.
+This dashboard focuses on **unique wealth-building instruments**: curated Scout Finds with hold-to-earn mechanics, the Strategy / Saylor Stack of tokenized equities and synthetic trackers, and high-conviction research insights from InvestAnswers coverage.
 
 ## Agent-Ready
 
@@ -12,10 +12,12 @@ This site is **agent-callable** via WebMCP or direct JSON endpoints. See:
 
 - Enriches **Scout Finds** from curated markdown reports with live DexScreener prices
 - Enriches **Strategy / Saylor Stack** instruments with live market data
+- Tracks **InvestAnswers Highlights** for high-conviction research insights
 - Builds datasets:
   - `data/scout-findings.json` — reward-generating tokens with PnL tracking
   - `data/strategy-stack.json` — tokenized equities & trackers with PnL
-- Frontend (`index.html`) fetches both JSON files and renders Scout + Strategy panels with full PnL
+  - `data/investanswers-highlights.json` — curated research highlights
+- Frontend (`index.html`) fetches all JSON files and renders Scout + Strategy + InvestAnswers panels
 
 ## Local run
 
