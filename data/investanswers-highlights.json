@@ -10,7 +10,7 @@
       "url": "https://investanswers.io/"
     }
   ],
-  "disclaimer": "Highlights mix InvestAnswers coverage, secondary summaries of that coverage, and primary cross-checks (Riri stress-test 2026-09-08). Not financial advice. Figures move; re-check sources.",
+  "disclaimer": "Highlights mix InvestAnswers coverage, secondary AI summaries (mainly kazuha.ai; full YouTube transcripts often unavailable), and primary cross-checks (Riri stress-test 2026-09-08). Not financial advice. Figures move; re-check sources.",
   "assets": [
     {
       "id": "tesla",
@@ -27,7 +27,7 @@
         {
           "label": "Vegas robotaxi cap",
           "value": "NTA ceiling 5,000",
-          "detail": "Approved ceiling for first 12 months in Clark County, not applied fleet and not Cybercab-only.",
+          "detail": "Approved ceiling for first 12 months in Clark County, not “applied fleet” and not Cybercab-only.",
           "impact": "high"
         },
         {
@@ -35,10 +35,36 @@
           "value": "Buy the FUD",
           "detail": "Media dip as long-term entry gift. Opinion only.",
           "impact": "medium"
+        },
+        {
+          "label": "Vera Rubin supply (IA panel, secondary)",
+          "value": "~30-40% TSLA+SpaceX share (cited)",
+          "detail": "From AI Singularity ep 28 Aug via kazuha summary. Guest/IA panel claim; not Tesla IR. Synergy catalyst with SpaceX.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=QpO9JiQ37EQ",
+          "nuggetId": "terrafab-vera-rubin-2026-08-28"
+        },
+        {
+          "label": "TerraFab (IA cite, secondary)",
+          "value": "Mini test fab first; cheaper inference/memory",
+          "detail": "Aimed at Optimus and robotaxi. Secondary summary only.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=QpO9JiQ37EQ",
+          "nuggetId": "terrafab-vera-rubin-2026-08-28"
+        },
+        {
+          "label": "Long-horizon PT (IA narrative, opinion)",
+          "value": "~$8k by 2032 (CyberCab + Optimus story)",
+          "detail": "Oceans First Q&A 6 Sep via listing summary only. Stamp as IA target narrative, not a forecast we endorse. Accumulate-on-10%+-dips also in that Q&A.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=4Meph9oHqoU",
+          "nuggetId": "oceans-first-8k-pt-2026-09-06"
         }
       ],
       "sources": [
-        "https://www.kazuha.ai/sources/investanswers/posts/massive-buy-signals-flash-genius-compute-macro-problems"
+        "https://www.kazuha.ai/sources/investanswers/posts/massive-buy-signals-flash-genius-compute-macro-problems",
+        "https://www.youtube.com/watch?v=QpO9JiQ37EQ",
+        "https://www.youtube.com/watch?v=4Meph9oHqoU"
       ]
     },
     {
@@ -50,24 +76,55 @@
         {
           "label": "Synergy (IA opinion)",
           "value": "TSLA as space call option",
-          "detail": "Speculative synergy / merger narratives.",
+          "detail": "Speculative synergy narratives. Merger premium math deliberately omitted from page (O skip #5).",
           "impact": "high"
         },
         {
-          "label": "Post-IPO tactic (dated)",
-          "value": "Wait ~20% / ~$135 to $141 band (Jun 2026 IA window)",
-          "detail": "May already be live; stamp price context before presenting as unused entry.",
-          "impact": "medium"
+          "label": "DCA / unlock framing (dated, secondary)",
+          "value": "DCA under ~$135; unlock dips ~$104 (IA)",
+          "detail": "Dual Stack 23 Aug via kazuha. Re-anchor to live secondary price before treating as unused entry.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=q880AYA6AiA",
+          "nuggetId": "spacex-neocloud-orbital-2026-08-23"
         },
         {
-          "label": "Orbital compute",
-          "value": "Theme only",
-          "detail": "Strip hard multi-hundred $B until transcript-backed.",
-          "impact": "low"
+          "label": "NeoCloud (IA cite, secondary)",
+          "value": "Toward ~$50B run-rate (framed)",
+          "detail": "Secondary summary. Verify before treating as booked ARR.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=q880AYA6AiA",
+          "nuggetId": "spacex-neocloud-orbital-2026-08-23"
+        },
+        {
+          "label": "Orbital DC narrative (IA sketch, secondary)",
+          "value": "~$300B/yr at 50% margins if ~10GW",
+          "detail": "Long-term sketch only, not contracted revenue. Same Dual Stack summary.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=q880AYA6AiA",
+          "nuggetId": "spacex-neocloud-orbital-2026-08-23"
+        },
+        {
+          "label": "Power capacity (IA cite, secondary)",
+          "value": "~1.286GW toward 5-10GW target",
+          "detail": "AI Singularity 28 Aug summary. Directional.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=QpO9JiQ37EQ",
+          "nuggetId": "terrafab-vera-rubin-2026-08-28"
+        },
+        {
+          "label": "Merger window (IA opinion)",
+          "value": "~2027-28 narrative",
+          "detail": "Oceans First listing summary. Opinion-heavy; no official deal.",
+          "impact": "low",
+          "sourceUrl": "https://www.youtube.com/watch?v=4Meph9oHqoU",
+          "nuggetId": "oceans-first-8k-pt-2026-09-06"
         }
       ],
       "sources": [
-        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan"
+        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan",
+        "https://www.youtube.com/watch?v=q880AYA6AiA",
+        "https://www.youtube.com/watch?v=QpO9JiQ37EQ",
+        "https://www.youtube.com/watch?v=4Meph9oHqoU"
       ]
     },
     {
@@ -77,13 +134,55 @@
       "thesis": "High-conviction L1: RWA surge, possible faster path to lower inflation / higher burns, settlement layer for AI agents.",
       "highlights": [
         {
-          "label": "RWA TVL (dated)",
-          "value": "~$3.4B early Jul 2026 IA cite; ~$4.0 to $4.2B early Sep 2026 dashboards",
-          "detail": "Stamp dashboard date on UI. Growth from ~$100 to $200M mid/late 2024 is directional, not a clean single YoY print.",
-          "impact": "high"
+          "label": "RWA TVL (dated, secondary)",
+          "value": "~$4.1B (IA Aug 27 cite)",
+          "detail": "Upgrades Jul ~$3.4B seed. Cross-check live dashboards (~$4.0-4.2B early Sep). Stamp date on UI.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+          "nuggetId": "sol-supply-shock-pts-2026-08-27"
         },
         {
-          "label": "Price band $600 to $990",
+          "label": "x402 AI agent share (secondary)",
+          "value": "~93% of x402 autonomous AI agent txns on Solana",
+          "detail": "Abundance ep 4 Sep via kazuha. Specific share for AI-settlement thesis.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=Gq4boUqPG8g",
+          "nuggetId": "sol-x402-93pct-2026-09-04"
+        },
+        {
+          "label": "SIMD disinflation path (proposal, secondary)",
+          "value": "Faster path to ~1.5% terminal (~3y); ~19M SOL less issuance",
+          "detail": "Double annual disinflation 15% to 30% framing. Confirm live SIMD status. Not the old 8k-20k burn paraphrase.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+          "nuggetId": "sol-supply-shock-pts-2026-08-27"
+        },
+        {
+          "label": "ETH-relative ladders (IA, secondary)",
+          "value": "~$170 / $240 / $365 (33% / 50% / 70% ETH mcap)",
+          "detail": "Scenario ladders, not promises. LILO ~$134-$226 also in same ep.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+          "nuggetId": "sol-supply-shock-pts-2026-08-27"
+        },
+        {
+          "label": "BESOL ETF share (dated, secondary)",
+          "value": "~$1.25B flows; ~79% Solana ETF share",
+          "detail": "Aug 27 Supply Shock summary.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+          "nuggetId": "sol-supply-shock-pts-2026-08-27"
+        },
+        {
+          "label": "Alpenglow (roadmap, secondary)",
+          "value": "Oct aim toward ~150ms settlement",
+          "detail": "Roadmap ambition; slot time is not finality. Prior ~350ms mainnet still valid context.",
+          "impact": "medium",
+          "sourceUrl": "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+          "nuggetId": "sol-supply-shock-pts-2026-08-27"
+        },
+        {
+          "label": "Price band $600-$990",
           "value": "Ansem (amplified on IA)",
           "detail": "Not IA or VanEck proprietary targets. Attribute Ansem via IA episode.",
           "impact": "high"
@@ -95,21 +194,17 @@
           "impact": "high"
         },
         {
-          "label": "Slots",
-          "value": "~350ms mainnet",
-          "detail": "SIMD-0525 style activation ~Aug 2026. Slot time is not finality.",
-          "impact": "medium"
-        },
-        {
           "label": "Burn path (proposals)",
-          "value": "~7.5k to 9k SOL/day at recent activity",
-          "detail": "Replaces stretched 8k to 20k paraphrase. Confirm SIMD status live.",
+          "value": "~7.5k-9k SOL/day at recent activity",
+          "detail": "Stress-test band. Confirm SIMD status live.",
           "impact": "high"
         }
       ],
       "sources": [
         "https://www.kazuha.ai/sources/investanswers/posts/massive-buy-signals-flash-genius-compute-macro-problems",
-        "https://www.kazuha.ai/sources/investanswers/posts/the-break-out-turbo-speed-ai-agent-explosion"
+        "https://www.kazuha.ai/sources/investanswers/posts/the-break-out-turbo-speed-ai-agent-explosion",
+        "https://www.youtube.com/watch?v=YU_y-iBxpzA",
+        "https://www.youtube.com/watch?v=Gq4boUqPG8g"
       ]
     },
     {
@@ -119,26 +214,31 @@
       "thesis": "Humanoid / physical AI is the next frontier. Tesla as system owner (software + design) captures margin vs component makers.",
       "highlights": [
         {
-          "label": "Musk magnitude (cited)",
-          "value": "~$20 to $25T class",
-          "detail": "Keep magnitude; do not ship by 2032 as Musk primary.",
-          "impact": "high"
+          "label": "Musk magnitude via IA (secondary)",
+          "value": "Digital AI ~$20-30T class; humanoids 10x economy / ~1B robots in 10y (cited)",
+          "detail": "G20 coverage 1 Sep via kazuha. Keep magnitude; do not force by-2032 as Musk primary on this tile.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=K4UwuOJC1us",
+          "nuggetId": "g20-humanoid-10x-2026-09-01"
         },
         {
           "label": "Factory ambition (IA cite)",
-          "value": "Up to ~10M units/yr narratives",
-          "detail": "Ambition / IA chapter, not shipped capacity.",
-          "impact": "high"
+          "value": "Austin ~10M units/yr narratives",
+          "detail": "Ambition / IA chapter, not shipped capacity. Reconfirmed in G20 ep summary.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=K4UwuOJC1us",
+          "nuggetId": "g20-humanoid-10x-2026-09-01"
         },
         {
           "label": "Actuators BOM",
-          "value": "~40 to 60%",
+          "value": "~40-60%",
           "detail": "Industry range; IA preference for system owners is opinion.",
           "impact": "medium"
         }
       ],
       "sources": [
-        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan"
+        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan",
+        "https://www.youtube.com/watch?v=K4UwuOJC1us"
       ]
     },
     {
@@ -148,9 +248,25 @@
       "thesis": "Purpose-built autonomous vehicle without steering wheel / pedals. Fleet economics not fully in the stock yet per IA.",
       "highlights": [
         {
+          "label": "Unit economics (IA cite, secondary)",
+          "value": "~$15-18k cost at scale; ~$30-35k retail (private fleets)",
+          "detail": "Abundance 4 Sep via kazuha. Concrete economics beyond TAM. NHTSA/regulatory friction also named in that ep.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=Gq4boUqPG8g",
+          "nuggetId": "cybercab-unit-econ-2026-09-04"
+        },
+        {
+          "label": "Unsupervised FSD miles (IA cite, secondary)",
+          "value": ">1M; ~17% WoW; path to 5-10M by EOY 2026 (sketched)",
+          "detail": "Same Abundance summary. Path is sketched, not guaranteed.",
+          "impact": "high",
+          "sourceUrl": "https://www.youtube.com/watch?v=Gq4boUqPG8g",
+          "nuggetId": "cybercab-unit-econ-2026-09-04"
+        },
+        {
           "label": "Musk robotaxi magnitude",
-          "value": "~$5 to $10T class",
-          "detail": "Keep magnitude; qualify or drop by 2032.",
+          "value": "~$5-10T class",
+          "detail": "Keep magnitude; qualify or drop by-2032.",
           "impact": "high"
         },
         {
@@ -161,14 +277,15 @@
         },
         {
           "label": "Production",
-          "value": "2026 ramp",
+          "value": "2026 ramp; Sep 3 CyberCab fleet launch (historical)",
           "detail": "OK if not oversold as unsupervised scale solved.",
           "impact": "high"
         }
       ],
       "sources": [
         "https://www.kazuha.ai/sources/investanswers/posts/massive-buy-signals-flash-genius-compute-macro-problems",
-        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan"
+        "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan",
+        "https://www.youtube.com/watch?v=Gq4boUqPG8g"
       ]
     }
   ],
@@ -179,7 +296,25 @@
       "title": "I am a TAM Hunter First, Then TAM Winner 2nd",
       "path": "assets/investanswers-tam-hunter.png",
       "source": "InvestAnswers",
-      "note": "IA TAM framework chart. Not verified market facts. Key bars: Optimus $25.0T, SpaceX Enterprise $22.7T, Robotaxi $10.0T."
+      "note": "IA TAM framework chart. Not verified market facts. Key bars: Optimus $25.0T, SpaceX Enterprise $22.7T, Robotaxis $10.0T."
     }
-  ]
+  ],
+  "nuggetSweep": {
+    "date": "2026-09-08",
+    "promoted": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      8
+    ],
+    "skipped": [
+      5
+    ],
+    "skipReason": "Merger premium math kept off page (O: everything minus #5)",
+    "source": "nuggets-2026-09-08 (Biz promote; skip #5)",
+    "layer": "secondary_summary"
+  }
 }
