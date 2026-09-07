@@ -74,6 +74,12 @@
       "thesis": "IA covers SpaceX IPO math and Tesla synergy: orbital compute, shared AI stack, optional merger / stake narratives over 12 to 24 months.",
       "highlights": [
         {
+          "label": "Synergy (IA opinion)",
+          "value": "TSLA as space call option",
+          "detail": "Speculative synergy narratives. Merger premium math deliberately omitted from page (O skip #5).",
+          "impact": "high"
+        },
+        {
           "label": "DCA / unlock framing (dated, secondary)",
           "value": "DCA under ~$135; unlock dips ~$104 (IA)",
           "detail": "Dual Stack 23 Aug via kazuha. Re-anchor to live secondary price before treating as unused entry.",
@@ -308,7 +314,7 @@
       5
     ],
     "skipReason": "Merger premium math kept off page (O: everything minus #5)",
-    "source": "/workspace/invest-innovation/nuggets-2026-09-08.json",
+    "source": "nuggets-2026-09-08 (Biz promote; skip #5)",
     "layer": "secondary_summary"
   }
 }
