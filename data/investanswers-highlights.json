@@ -10,7 +10,7 @@
       "url": "https://investanswers.io/"
     }
   ],
-  "disclaimer": "Highlights are curated from InvestAnswers coverage and secondary summaries of that coverage. Not financial advice. Figures move; always re-check the source episode.",
+  "disclaimer": "Highlights mix InvestAnswers coverage, secondary summaries of that coverage, and primary cross-checks (Riri stress-test 2026-09-08). Not financial advice. Figures move; re-check sources.",
   "assets": [
     {
       "id": "tesla",
@@ -19,21 +19,21 @@
       "thesis": "IA frames Tesla as pivoting from pure auto to AI and robotics. Cybercab fleet not fully priced in; FUD dips treated as long-term entries.",
       "highlights": [
         {
-          "label": "Framing",
+          "label": "Framing (IA opinion)",
           "value": "AI / robotics powerhouse",
-          "detail": "Not just cars; Optimus + robotaxi as core valuation drivers.",
+          "detail": "Labeled opinion, not a number.",
           "impact": "high"
         },
         {
-          "label": "Cybercab licenses (Vegas)",
-          "value": "5,000 applied",
-          "detail": "Cited in IA coverage of robotaxi expansion (Miami, Dallas, Houston, Austin, Bay Area).",
+          "label": "Vegas robotaxi cap",
+          "value": "NTA ceiling 5,000",
+          "detail": "Approved ceiling for first 12 months in Clark County, not applied fleet and not Cybercab-only.",
           "impact": "high"
         },
         {
-          "label": "Entry framing",
+          "label": "Entry framing (IA opinion)",
           "value": "Buy the FUD",
-          "detail": "Negative accident coverage framed as temporary gifts for long-term holders.",
+          "detail": "Media dip as long-term entry gift. Opinion only.",
           "impact": "medium"
         }
       ],
@@ -48,22 +48,22 @@
       "thesis": "IA covers SpaceX IPO math and Tesla synergy: orbital compute, shared AI stack, optional merger / stake narratives over 12 to 24 months.",
       "highlights": [
         {
-          "label": "Synergy",
-          "value": "Tesla call option on space",
-          "detail": "Corporate synergies or eventual merger discussed as making TSLA an indirect space-economy bet.",
+          "label": "Synergy (IA opinion)",
+          "value": "TSLA as space call option",
+          "detail": "Speculative synergy / merger narratives.",
           "impact": "high"
         },
         {
-          "label": "IPO tactic (IA)",
-          "value": "Wait ~20% pullback",
-          "detail": "After IPO surge, look for pullback into roughly $135 to $141 range before chasing (as summarized from IA).",
-          "impact": "high"
+          "label": "Post-IPO tactic (dated)",
+          "value": "Wait ~20% / ~$135 to $141 band (Jun 2026 IA window)",
+          "detail": "May already be live; stamp price context before presenting as unused entry.",
+          "impact": "medium"
         },
         {
           "label": "Orbital compute",
-          "value": "Multi-hundred $B theme",
-          "detail": "Large multi-year capital narratives for orbital data centers appear in adjacent IA / ecosystem coverage.",
-          "impact": "medium"
+          "value": "Theme only",
+          "detail": "Strip hard multi-hundred $B until transcript-backed.",
+          "impact": "low"
         }
       ],
       "sources": [
@@ -77,27 +77,33 @@
       "thesis": "High-conviction L1: RWA surge, possible faster path to lower inflation / higher burns, settlement layer for AI agents.",
       "highlights": [
         {
-          "label": "RWA TVL (cited)",
-          "value": "~$3.4B",
-          "detail": "From about $100M to $200M up to about $3.4B in one year on Solana (IA episode summary).",
+          "label": "RWA TVL (dated)",
+          "value": "~$3.4B early Jul 2026 IA cite; ~$4.0 to $4.2B early Sep 2026 dashboards",
+          "detail": "Stamp dashboard date on UI. Growth from ~$100 to $200M mid/late 2024 is directional, not a clean single YoY print.",
           "impact": "high"
         },
         {
-          "label": "Price targets (cited)",
-          "value": "$600 to $990",
-          "detail": "Bear-to-bull band matching Eth-like market cap narratives; VanEck long-term $3,000 by 2030 also mentioned.",
+          "label": "Price band $600 to $990",
+          "value": "Ansem (amplified on IA)",
+          "detail": "Not IA or VanEck proprietary targets. Attribute Ansem via IA episode.",
           "impact": "high"
         },
         {
-          "label": "Network speed",
-          "value": "~350ms slots",
-          "detail": "Mainnet slot times cited; AI-agent settlement narrative from low latency / fast finality.",
+          "label": "VanEck long-term",
+          "value": "~$3.2k bull / ~$335 base (2030)",
+          "detail": "Always say bull case if quoting ~$3k.",
+          "impact": "high"
+        },
+        {
+          "label": "Slots",
+          "value": "~350ms mainnet",
+          "detail": "SIMD-0525 style activation ~Aug 2026. Slot time is not finality.",
           "impact": "medium"
         },
         {
-          "label": "Burn path (SIMD)",
-          "value": "650 → 8k–20k SOL/day?",
-          "detail": "Proposals discussed that could accelerate terminal inflation toward ~1.5% and lift daily burns.",
+          "label": "Burn path (proposals)",
+          "value": "~7.5k to 9k SOL/day at recent activity",
+          "detail": "Replaces stretched 8k to 20k paraphrase. Confirm SIMD status live.",
           "impact": "high"
         }
       ],
@@ -113,21 +119,21 @@
       "thesis": "Humanoid / physical AI is the next frontier. Tesla as system owner (software + design) captures margin vs component makers.",
       "highlights": [
         {
-          "label": "Musk Optimus valuation (cited)",
-          "value": "~$25T by 2032",
-          "detail": "Cited in IA humanoids / SpaceX IPO episode summaries as Optimus business potential.",
+          "label": "Musk magnitude (cited)",
+          "value": "~$20 to $25T class",
+          "detail": "Keep magnitude; do not ship by 2032 as Musk primary.",
           "impact": "high"
         },
         {
-          "label": "Factory ambition",
-          "value": "Up to 10M units/yr line",
-          "detail": "Dedicated factory narratives alongside Fremont 1M-unit line; Gen 3 mass production ramp discussed.",
+          "label": "Factory ambition (IA cite)",
+          "value": "Up to ~10M units/yr narratives",
+          "detail": "Ambition / IA chapter, not shipped capacity.",
           "impact": "high"
         },
         {
-          "label": "Actuator share of BOM",
-          "value": "~60%",
-          "detail": "IA warns against fringe component plays; prefer system owners.",
+          "label": "Actuators BOM",
+          "value": "~40 to 60%",
+          "detail": "Industry range; IA preference for system owners is opinion.",
           "impact": "medium"
         }
       ],
@@ -142,28 +148,38 @@
       "thesis": "Purpose-built autonomous vehicle without steering wheel / pedals. Fleet economics not fully in the stock yet per IA.",
       "highlights": [
         {
-          "label": "Robotaxi value (cited)",
-          "value": "~$5T by 2032",
-          "detail": "Paired with Optimus in IA long-horizon framing.",
+          "label": "Musk robotaxi magnitude",
+          "value": "~$5 to $10T class",
+          "detail": "Keep magnitude; qualify or drop by 2032.",
           "impact": "high"
         },
         {
-          "label": "Production timing (ecosystem)",
+          "label": "Design",
+          "value": "No wheel / pedals",
+          "detail": "Supported.",
+          "impact": "high"
+        },
+        {
+          "label": "Production",
           "value": "2026 ramp",
-          "detail": "Broader coverage: Cybercab production start / Q2 2026 style timelines; IA stresses fleet not priced in.",
+          "detail": "OK if not oversold as unsupervised scale solved.",
           "impact": "high"
-        },
-        {
-          "label": "City expansion",
-          "value": "Multi-metro FSD robotaxi",
-          "detail": "IA notes expansion across major US metros and large Vegas license applications.",
-          "impact": "medium"
         }
       ],
       "sources": [
         "https://www.kazuha.ai/sources/investanswers/posts/massive-buy-signals-flash-genius-compute-macro-problems",
         "https://www.kazuha.ai/sources/investanswers/posts/next-10x-move-humanoids-spacex-ipo-math-crypto-plan"
       ]
+    }
+  ],
+  "stressTest": "Riri stress-test 2026-09-08",
+  "chartAssets": [
+    {
+      "id": "tam-hunter",
+      "title": "I am a TAM Hunter First, Then TAM Winner 2nd",
+      "path": "assets/investanswers-tam-hunter.png",
+      "source": "InvestAnswers",
+      "note": "IA TAM framework chart. Not verified market facts. Key bars: Optimus $25.0T, SpaceX Enterprise $22.7T, Robotaxi $10.0T."
     }
   ]
 }
