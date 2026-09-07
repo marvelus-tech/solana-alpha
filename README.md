@@ -1,4 +1,4 @@
-# Invest-Innovation — Reward-Generating Assets Dashboard
+# Invest-Innovation: Reward-Generating Assets Dashboard
 
 This dashboard focuses on **unique wealth-building instruments**: curated Scout Finds with hold-to-earn mechanics, the Strategy / Saylor Stack of tokenized equities and synthetic trackers, and high-conviction research insights from InvestAnswers coverage.
 
