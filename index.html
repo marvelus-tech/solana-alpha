@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solana Alpha — Live</title>
+  <title>Invest-Innovation — Live</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -591,14 +591,161 @@
       padding-top:var(--spacing-xs);
       margin-top:var(--spacing-xs);
     }
+    .investanswers{
+      margin-top:var(--spacing-lg);
+      margin-bottom:var(--spacing-lg);
+    }
+    .investanswers .panel{
+      border:1px solid #6b8dd6;
+      box-shadow:var(--shadow-md);
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,rgba(107,141,214,0.02) 0%,var(--surface) 50%);
+    }
+    .investanswers .panel::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:2px;
+      background:linear-gradient(90deg,#6b8dd6,#8ba5e0);
+    }
+    .investanswers h2{
+      padding-top:3px;
+      color:var(--text);
+      font-size:1.15rem;
+    }
+    .investanswers h2::before{
+      content:'◆';
+      font-size:.8rem;
+      color:#6b8dd6;
+      margin-right:8px;
+      font-weight:700;
+    }
+    .ia-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:var(--spacing-md);
+      margin-top:var(--spacing-md);
+    }
+    .ia-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-row);
+      padding:var(--spacing-md);
+      transition:all var(--duration-fast) var(--ease-smooth);
+      opacity:0;
+      animation:fadeInUp var(--duration-spatial) var(--ease-smooth) forwards;
+    }
+    .ia-card:hover{
+      box-shadow:var(--shadow-md);
+      transform:translateY(-1px);
+      border-color:#6b8dd6;
+    }
+    .ia-card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-bottom:var(--spacing-sm);
+    }
+    .ia-card-title{
+      font-weight:700;
+      font-size:1rem;
+      color:var(--text);
+      font-family:'Space Grotesk',sans-serif;
+    }
+    .ia-card-ticker{
+      font-size:.78rem;
+      color:var(--muted);
+      font-weight:600;
+      background:var(--bg);
+      padding:3px 8px;
+      border-radius:var(--radius-badge);
+      margin-top:2px;
+    }
+    .ia-card-thesis{
+      font-size:.86rem;
+      color:var(--text);
+      line-height:1.4;
+      margin-bottom:var(--spacing-sm);
+      padding-bottom:var(--spacing-sm);
+      border-bottom:1px solid var(--border);
+    }
+    .ia-highlight{
+      margin-bottom:var(--spacing-xs);
+      padding:var(--spacing-xs);
+      background:var(--bg);
+      border-radius:6px;
+      border-left:3px solid transparent;
+    }
+    .ia-highlight.impact-high{
+      border-left-color:#6b8dd6;
+    }
+    .ia-highlight.impact-medium{
+      border-left-color:var(--muted);
+    }
+    .ia-highlight-label{
+      font-size:.72rem;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-weight:600;
+      margin-bottom:2px;
+    }
+    .ia-highlight-value{
+      font-size:.88rem;
+      font-weight:600;
+      color:var(--text);
+      margin-bottom:2px;
+    }
+    .ia-highlight-detail{
+      font-size:.78rem;
+      color:var(--muted);
+      line-height:1.3;
+    }
+    .ia-footer{
+      margin-top:var(--spacing-lg);
+      padding-top:var(--spacing-md);
+      border-top:1px solid var(--border);
+      font-size:.84rem;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .ia-sources{
+      display:flex;
+      gap:var(--spacing-sm);
+      flex-wrap:wrap;
+      margin-bottom:var(--spacing-xs);
+    }
+    .ia-sources a{
+      color:#6b8dd6;
+      font-weight:600;
+      text-decoration:none;
+      transition:color var(--duration-fast) var(--ease-smooth);
+    }
+    .ia-sources a:hover{
+      color:#5277c5;
+      text-decoration:underline;
+    }
+    .ia-disclaimer{
+      font-style:italic;
+      color:var(--muted);
+      margin-top:var(--spacing-xs);
+    }
+    .ia-updated{
+      font-size:.78rem;
+      color:var(--muted);
+      margin-top:var(--spacing-xs);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="bar">
       <div>
-        <h1>Solana Alpha</h1>
-        <p class="sub">Tracking reward-generating assets and wealth-building instruments on Solana.</p>
+        <h1>Invest-Innovation</h1>
+        <p class="sub">Tracking reward-generating assets, wealth-building instruments, and high-conviction research insights.</p>
       </div>
       <div class="updated" id="updatedAt"><span class="live-pulse"></span>Updating…</div>
     </header>
@@ -617,6 +764,14 @@
       <article class="panel">
         <h2>Scout Finds — Hold-to-Earn Focus</h2>
         <div class="list" id="scoutFinds"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
+      </article>
+    </section>
+
+    <section class="investanswers" id="investanswers-tracker">
+      <article class="panel">
+        <h2>InvestAnswers Tracker</h2>
+        <div class="ia-grid" id="investAnswersGrid"><div class="loading"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
+        <div class="ia-footer" id="investAnswersFooter"></div>
       </article>
     </section>
 
@@ -891,6 +1046,92 @@
     }
 
     load();
+    loadInvestAnswers();
+
+    // Normalize dashes: replace em dashes, en dashes, arrows with "to"
+    function normalizeDashes(str) {
+      if (!str) return '';
+      return str
+        .replace(/—/g, ' ')  // em dash
+        .replace(/–/g, ' to ')  // en dash
+        .replace(/→/g, ' to ')  // arrow
+        .replace(/\s+/g, ' ')  // collapse multiple spaces
+        .trim();
+    }
+
+    async function loadInvestAnswers() {
+      try {
+        const res = await fetch('./data/investanswers-highlights.json?ts=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) {
+          renderInvestAnswersEmpty();
+          return;
+        }
+        
+        const data = await res.json();
+        renderInvestAnswers(data);
+      } catch (err) {
+        renderInvestAnswersEmpty();
+      }
+    }
+
+    function renderInvestAnswersEmpty() {
+      const grid = document.getElementById('investAnswersGrid');
+      grid.innerHTML = '<div class="empty">InvestAnswers highlights unavailable.</div>';
+      document.getElementById('investAnswersFooter').innerHTML = '';
+    }
+
+    function renderInvestAnswers(data) {
+      const grid = document.getElementById('investAnswersGrid');
+      const footer = document.getElementById('investAnswersFooter');
+      
+      if (!data.assets || data.assets.length === 0) {
+        renderInvestAnswersEmpty();
+        return;
+      }
+      
+      // Render cards
+      grid.innerHTML = data.assets.map((asset, idx) => {
+        const highlightsHtml = (asset.highlights || []).map(h => {
+          const impactClass = h.impact ? `impact-${h.impact}` : '';
+          const normalizedValue = normalizeDashes(h.value);
+          const normalizedDetail = h.detail ? normalizeDashes(h.detail) : '';
+          
+          return `
+            <div class="ia-highlight ${impactClass}">
+              <div class="ia-highlight-label">${h.label}</div>
+              <div class="ia-highlight-value">${normalizedValue}</div>
+              ${normalizedDetail ? `<div class="ia-highlight-detail">${normalizedDetail}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+        
+        const normalizedThesis = normalizeDashes(asset.thesis);
+        
+        return `
+          <div class="ia-card" style="animation-delay:${idx * 40}ms">
+            <div class="ia-card-header">
+              <div>
+                <div class="ia-card-title">${asset.name}</div>
+                <div class="ia-card-ticker">${asset.ticker}</div>
+              </div>
+            </div>
+            <div class="ia-card-thesis">${normalizedThesis}</div>
+            ${highlightsHtml}
+          </div>
+        `;
+      }).join('');
+      
+      // Render footer with attribution, disclaimer, and updated date
+      const sourcesHtml = (data.sourcePrimary || []).map(s => 
+        `<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a>`
+      ).join(' · ');
+      
+      footer.innerHTML = `
+        <div class="ia-sources">Sources: ${sourcesHtml}</div>
+        <div class="ia-disclaimer">${data.disclaimer}</div>
+        <div class="ia-updated">Updated: ${data.updatedAt}</div>
+      `;
+    }
 
     // Copy contract address to clipboard
     function copyAddress(address, element) {
